@@ -17,14 +17,15 @@ MAMEdir = "/Users/uci/Games/SDLMAME Config/"
 AMdir   = "/Users/uci/Games/Attract-Mode Config/"
 
 """
-Step 2)  Create a $MAMEdir/hi2txt/ directory and put hi2txt.jar and hi2txt.zip in this directory
-Step 3)  Unzip hi2txt.zip and rename the unzipped directory "hi2txt_zip_contents"
-Step 4)  Make sure hiscore.dat is located in your $MAMEdir/dats/ directory
-Step 5a) To process a single game, type: 
-         ./hi2txt.py {game}
-         where {game} is the romname of the game (e.g. pacman) 
-Step 5b) Or, to process all games in your Attract-Mode MAME romlist, type:
-         ./hi2txt.py all
+Step 2) Create a $MAMEdir/hi2txt/ directory and put hi2txt.jar and hi2txt.zip in this directory.
+Step 3) Unzip hi2txt.zip here and rename the unzipped directory "hi2txt_zip_contents".
+Step 4) Make sure hiscore.dat is located in your $MAMEdir/dats/ directory.
+Step 5) Create a $AMdir/hiscores/ directory where the hiscore .ini files will be saved.
+Step 6) To process a single game, type: 
+        ./hi2txt.py {game}
+        where {game} is the romname of the game (e.g. pacman) 
+Step 6) Or, to process all games in your Attract-Mode MAME romlist, type:
+        ./hi2txt.py all
 
 Author: Gordon Lim
 Last Edit: 18 Jan 2018 
