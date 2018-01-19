@@ -1,6 +1,8 @@
 #!/usr/bin/python -tt
 """
-Program to get hiscores from a MAME game using the 'hi2txt' Java archive (see http://greatstone.free.fr/hi2txt/), and save them in a formatted ini file in a dedicated Attract-Mode hiscore directory. This allows hiscores to be displayed in any Attract-Mode layout using the 'file-format' module (e.g. see my Silky layout).
+Program to get hiscores from MAME games using the 'hi2txt' Java archive (see http://greatstone.free.fr/hi2txt/), 
+and save them in formatted .ini files in a dedicated Attract-Mode hiscore directory. This allows hiscores to be 
+displayed in any Attract-Mode layout using the 'file-format' module.
 
 Requirements:
 
@@ -10,22 +12,22 @@ Requirements:
 
 Usage:
 
-Step 1) Change $MAMEdir and $AMdir according to your setup:
+1) Change $MAMEdir and $AMdir according to your setup:
 """
 
-MAMEdir = "/Users/uci/Games/SDLMAME Config/"
-AMdir   = "/Users/uci/Games/Attract-Mode Config/"
+MAMEdir = "/Users/uci/Games/SDLMAME Config/"       # Directory containing your MAME files
+AMdir   = "/Users/uci/Games/Attract-Mode Config/"  # Directory containing your Attract-Mode files
 
 """
-Step 2) Create a $MAMEdir/hi2txt/ directory and put hi2txt.jar and hi2txt.zip in this directory.
-Step 3) Unzip hi2txt.zip here and rename the unzipped directory "hi2txt_zip_contents".
-Step 4) Make sure hiscore.dat is located in your $MAMEdir/dats/ directory.
-Step 5) Create a $AMdir/hiscores/ directory where the hiscore .ini files will be saved.
-Step 6) To process a single game, type: 
-        ./hi2txt.py {game}
-        where {game} is the romname of the game (e.g. pacman) 
-Step 6) Or, to process all games in your Attract-Mode MAME romlist, type:
-        ./hi2txt.py all
+2) Create a $MAMEdir/hi2txt/ directory and put hi2txt.jar and hi2txt.zip in this directory.
+3) Unzip hi2txt.zip here and rename the unzipped directory "hi2txt_zip_contents".
+4) Make sure hiscore.dat is located in your $MAMEdir/dats/ directory.
+5) Create a $AMdir/hiscores/ directory where the hiscore .ini files will be saved.
+6) To process a single game, type: 
+   ./hi2txt.py {game}
+   where {game} is the romname of the game (e.g. pacman) 
+OR to process all games in your Attract-Mode MAME romlist, type:
+   ./hi2txt.py all
 
 Author: Gordon Lim
 Last Edit: 18 Jan 2018 
