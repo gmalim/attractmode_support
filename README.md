@@ -1,6 +1,6 @@
 # MAME support tools for Attract-Mode
 
-This repository contains a collection of programs that provides [MAME](mamedev.org/) support for the [Attract-Mode](attractmode.org/) frontend:
+This repository contains a collection of programs that provides [MAME](http://www.mamedev.org/) support for the [Attract-Mode](http://www.attractmode.org/) frontend:
 
 - MAME hiscore support for Attract-Mode (*hiscoreanalysis.py*)
 - MAME bezel art support for Attract-Mode (*bezelanalysis.py*)
