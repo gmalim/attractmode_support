@@ -1,9 +1,10 @@
-# Attract-Mode support tools
+# MAME support tools for Attract-Mode
 
-This repository contains a collection of programs that provides support for the [Attract-Mode](attractmode.org/) frontend:
+This repository contains a collection of programs that provides [MAME](http://www.mamedev.org/) support for the [Attract-Mode](http://www.attractmode.org/) frontend:
 
-- Display hiscores in layouts (*hi2txt.py*)
-- Display bezel art in layouts (*createartwork.py*)
-- Title display and sorting support (*updateromlist.py*)
-- New layout with above functionality (*layout.nut*)
+- MAME hiscore support for Attract-Mode (*hiscoreanalysis.py*)
+- MAME bezel art support for Attract-Mode (*bezelanalysis.py*)
+- MAME emulation speed support for Attract-Mode (*speedanalysis.py*)
+- MAME title display and sorting support for Attract-Mode ([*updateromlist.py*](updateromlist.py))
+- New Attract-Mode layout with above functionality (*layout.nut*)
 
