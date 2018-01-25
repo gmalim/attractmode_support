@@ -1,21 +1,19 @@
 #!/usr/bin/python -tt
 """
-Program to generate new MAME emulation benchmarks of a single game or a list of games.
+Program to generate MAME emulation benchmarks of a single game or a list of games.
 
 Usage:
 
-1) Change $MAMEdir and $AMdir according to your setup:
-   $MAMEdir = directory where {game}.log files created by mame.csh/mame.sh are stored.
-
+1) Change the following three directories according to your setup:
 """
 
 MAMEexecdir   = "/Users/uci/Games/SDLMAME v0.193 64-bit/" # Directory containing your MAME executable
 MAMEconfigdir = "/Users/uci/Games/SDLMAME Config/"        # Directory containing your MAME config files
-AMconfigdir   = "/Users/uci/Games/Attract-Mode Config/"  # Directory containing your Attract-Mode config files
+AMconfigdir   = "/Users/uci/Games/Attract-Mode Config/"   # Directory containing your Attract-Mode config files
 
 """
-
-2) To process a single game, type: 
+2) Create a directory called "benchmarks" in your $MAMEconfigdir
+3) To process a single game, type: 
    ./benchmarkgenerator.py {game}
    where {game} is the romname of the game (e.g. pacman) 
 OR to process all games in your Attract-Mode MAME romlist, type:
@@ -31,15 +29,13 @@ import sys
 MAMEromdir       = MAMEexecdir   + "roms/"
 MAMEbenchmarkdir = MAMEconfigdir + "benchmarks/"
 
-benchmarktimeperiod = 60 # secs
-
-def generatebenchmark(game):
+def generatebenchmark(game, benchmarktimeperiod):
 
     print("--- Generate new MAME benchmark file for {}...".format(game))
 
     # Generate new MAME speed benchmark:
 
-    command = ["./mame64", "-str", str(benchmarktimeperiod), game]
+    command = ["./mame64", "-str", benchmarktimeperiod, game]
 
     benchmarkfile = open(MAMEbenchmarkdir + game + "_lastgame.log", "w")
     subprocess.call(command, cwd = MAMEexecdir, stdout = benchmarkfile)
@@ -51,12 +47,36 @@ def generatebenchmark(game):
 
 def main():
 
+    # Check directories:
+
+    if not os.path.isdir(MAMEconfigdir):
+        print("MAME config directory does not exist  - EXIT")
+        return 1
+    
+    if not os.path.isdir(AMconfigdir):
+        print("AM config directory does not exist  - EXIT")
+        return 1
+    
+    if not os.path.isdir(MAMEexecdir):
+        print("MAME exec directory does not exist  - EXIT")
+        return 1
+
+    if not os.path.isdir(MAMEromdir):
+        print("MAME rom directory does not exist  - EXIT")
+        return 1
+    
+    if not os.path.isdir(MAMEbenchmarkdir):
+        print("MAME benchmark directory does not exist  - EXIT")
+        return 1
+    
     # Input:
     
-    name = sys.argv[1]
-    
-    if (name == 'all'):
+    inputargument = sys.argv[1]
 
+    benchmarktimeperiod = raw_input('Enter benchmark running time in seconds (default: 60 secs) and press return/enter: ') or '60'
+    
+    if (inputargument == 'all'):
+        
         # Transform AM romlist into list of games:
     
         filename = AMconfigdir + 'romlists/mame.txt'
@@ -73,10 +93,10 @@ def main():
         # Create MAME speed file for each game:
         
         for game in games:
-            generatebenchmark(game)
+            generatebenchmark(game, benchmarktimeperiod)
                         
     else:
-        generatebenchmark(name)
+        generatebenchmark(inputargument, benchmarktimeperiod)
 
     return 0
 

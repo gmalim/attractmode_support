@@ -1,29 +1,22 @@
 #!/usr/bin/python -tt
 """
 Program to analyze MAME benchmark files of a single game or a list of games. For each game:
-- Calculate average emulation speed and total emulation time 
-- Convert average emulation speed in to a 1-5 star rating
-- Convert MAME benchmark file into formatted .ini to be read by AM
-
-Requirements:
-
-- Create MAME and AM benchmark directories as explained below.
-- Run MAME using mame.csh or mame.sh scripts so benchmarks are automatically saved in .log files.
+- Calculate average emulation speed and total emulation time by taking into account previous benchmark data. 
+- Convert average emulation speed in to a 1-5 star rating.
+- Convert MAME benchmark files into formatted .ini files in a dedicated Attract-Mode benchmarks directory. This allows 
+  hiscores to be displayed in any Attract-Mode layout using the 'file-format' module.
 
 Usage:
 
-1) Change $MAMEdir and $AMdir according to your setup:
-   $MAMEdir = directory where {game}.log files created by mame.csh/mame.sh are stored.
-   $AMdir   = directory where {game}.ini files will be saved.
-
+1) Change the following two directories according to your setup:
 """
 
-MAMEbenchmarkdir = "/Users/uci/Games/SDLMAME Config/benchmarks/"       # Directory containing your MAME benchmark files
-AMbenchmarkdir   = "/Users/uci/Games/Attract-Mode Config/benchmarks/"  # Directory containing your Attract-Mode benchmark files
+MAMEconfigdir = "/Users/uci/Games/SDLMAME Config/"      # Directory containing your MAME config files
+AMconfigdir   = "/Users/uci/Games/Attract-Mode Config/" # Directory containing your Attract-Mode config files
 
 """
-
-2) To process a single game, type: 
+2) In each of these two directories, create a directory called "benchmarks".
+3) To process a single game, type: 
    ./benchmarkanalysis.py {game}
    where {game} is the romname of the game (e.g. pacman) 
 OR to process all games in your Attract-Mode MAME romlist, type:
@@ -37,6 +30,11 @@ import os
 import re
 import subprocess
 import sys
+
+starlevels = [80, 90, 95, 99]
+
+MAMEbenchmarkdir = MAMEconfigdir + "benchmarks/"
+AMbenchmarkdir   = AMconfigdir   + "benchmarks/"
 
 regexsearchpattern = 'Average speed: (\d+)\.\d*% \((\d+) seconds\)'
 
@@ -52,14 +50,12 @@ def getbenchmarkdata(MAMEbenchmarkfilename):
     
     if not matchobject:
         print("------ regex search of MAME benchmark file failed - EXIT")
-        exit
+        return 0, 0
     
     speed = float(matchobject.group(1))
     time  = float(matchobject.group(2))
 
     return speed, time   
-
-starlevels = [70, 80, 88, 95]
 
 def calculatestars(speed):
 
@@ -138,6 +134,18 @@ def createbenchmarkfile(game):
 
 def main():
 
+    # Check directories:
+
+    if not os.path.isdir(MAMEbenchmarkdir):
+        print("MAME benchmark directory does not exist  - EXIT")
+        return 1
+
+    if not os.path.isdir(AMbenchmarkdir):
+        print("AM benchmark directory does not exist  - EXIT")
+        return 1
+
+    # Input:
+    
     inputargument = sys.argv[1]
 
     if (inputargument == 'all'):
