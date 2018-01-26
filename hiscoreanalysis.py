@@ -15,14 +15,14 @@ Usage:
 1) Change the following two directories according to your setup:
 """
 
-MAMEconfigdir = "/Users/uci/Games/SDLMAME Config/"      # Directory containing your MAME configuration files
-AMconfigdir   = "/Users/uci/Games/Attract-Mode Config/" # Directory containing your Attract-Mode configuration files
+MAMEconfigdir = "${HOME}/Games/SDLMAME Config/"      # Directory containing your MAME configuration files
+AMconfigdir   = "${HOME}/Games/Attract-Mode Config/" # Directory containing your Attract-Mode configuration files
 
 """
-2) Create a $MAMEconfigdir/hi2txt/ directory and put hi2txt.jar and hi2txt.zip in this directory.
+2) Create a ${MAMEconfigdir}/hi2txt/ directory and put hi2txt.jar and hi2txt.zip in this directory.
 3) Unzip hi2txt.zip here and rename the unzipped directory "hi2txt_zip_contents".
-4) Make sure hiscore.dat is located in your $MAMEconfigdir/dats/ directory.
-5) Create a $AMconfigdir/hiscores/ directory where hiscore .ini files will be saved.
+4) Make sure hiscore.dat is located in your ${MAMEconfigdir}/dats/ directory.
+5) Create a ${AMconfigdir}/hiscores/ directory where hiscore .ini files will be saved.
 6) To process a single game, type: 
    ./hiscoreanalysis.py {game}
    where {game} is the romname of the game (e.g. pacman) 
@@ -30,7 +30,7 @@ OR to process all games in your Attract-Mode MAME romlist, type:
    ./hiscoreanalysis.py all
 
 Author: Gordon Lim
-Last Edit: 24 Jan 2018 
+Last Edit: 26 Jan 2018 
 """
 
 hiscoredat    = MAMEconfigdir + "dats/hiscore.dat"
@@ -68,7 +68,7 @@ def createhiscorefile(game):
         print("------ nvram/{0} nor hi/{0}.hi exists => this game has not been played yet => EXIT2".format(game))
         return 2
 
-    # Run hi2txt.jar and pipe output to temporary txt file:
+    # Run Java on hi2txt.jar and pipe output to temporary txt file:
     
     command = ["java", "-jar", hi2txtdir + "hi2txt.jar", "-r", hiscorefile, "-hiscoredat", hiscoredat,
                "-keep-field", 'RANK', 

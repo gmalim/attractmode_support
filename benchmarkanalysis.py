@@ -11,8 +11,8 @@ Usage:
 1) Change the following two directories according to your setup:
 """
 
-MAMEconfigdir = "/Users/uci/Games/SDLMAME Config/"      # Directory containing your MAME config files
-AMconfigdir   = "/Users/uci/Games/Attract-Mode Config/" # Directory containing your Attract-Mode config files
+MAMEconfigdir = "${HOME}/Games/SDLMAME Config/"      # Directory containing your MAME config files
+AMconfigdir   = "${HOME}/Games/Attract-Mode Config/" # Directory containing your Attract-Mode config files
 
 """
 2) In each of these two directories, create a directory called "benchmarks".
@@ -23,7 +23,7 @@ OR to process all games in your Attract-Mode MAME romlist, type:
    ./benchmarkanalysis.py all
 
 Author: Gordon Lim
-Last Edit: 24 Jan 2018 
+Last Edit: 26 Jan 2018 
 """
 
 import os

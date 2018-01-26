@@ -7,12 +7,12 @@ Usage:
 1) Change the following three directories according to your setup:
 """
 
-MAMEexecdir   = "/Users/uci/Games/SDLMAME v0.193 64-bit/" # Directory containing your MAME executable
-MAMEconfigdir = "/Users/uci/Games/SDLMAME Config/"        # Directory containing your MAME config files
-AMconfigdir   = "/Users/uci/Games/Attract-Mode Config/"   # Directory containing your Attract-Mode config files
+MAMEexecdir   = "${HOME}/Games/SDLMAME v0.193 64-bit/" # Directory containing your MAME executable
+MAMEconfigdir = "${HOME}/Games/SDLMAME Config/"        # Directory containing your MAME config files
+AMconfigdir   = "${HOME}/Games/Attract-Mode Config/"   # Directory containing your Attract-Mode config files
 
 """
-2) Create a directory called "benchmarks" in your $MAMEconfigdir
+2) Create a directory called "benchmarks" in your ${MAMEconfigdir}
 3) To process a single game, type: 
    ./benchmarkgenerator.py {game}
    where {game} is the romname of the game (e.g. pacman) 
@@ -20,7 +20,7 @@ OR to process all games in your Attract-Mode MAME romlist, type:
    ./benchmarkgenerator.py all
 
 Author: Gordon Lim
-Last Edit: 24 Jan 2018 
+Last Edit: 26 Jan 2018 
 """
 
 import subprocess
