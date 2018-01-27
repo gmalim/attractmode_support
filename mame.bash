@@ -16,6 +16,9 @@ AMSUPPORTDIR="${HOME}/Programming/attractmode_support/" # Your 'attractmode_supp
 #    alias mame='source ${AMSUPPORTDIR}/mame.bash'
 #    to your ${HOME}/.bash_profile, where ${AMSUPPORTDIR} points to your 'attractmode_support' directory
 # 4) Open a terminal and type: mame {game}
+#
+# Author: Gordon Lim
+# Last Edit: 27 Jan 2018 
 
 cd "${MAMEDIR}"
 if [ "$#" == "0" ]; then         # To start MAME without any game 

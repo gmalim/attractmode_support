@@ -16,6 +16,9 @@ set AMSUPPORTDIR = "${HOME}/Programming/attractmode_support/" # Your 'attractmod
 #    alias mame 'source ${AMSUPPORTDIR}/mame.csh'
 #    to your ${HOME}/.cshrc, where ${AMSUPPORTDIR} points to your 'attractmode_support' directory
 # 4) Open a terminal and type: mame {game}
+#
+# Author: Gordon Lim
+# Last Edit: 27 Jan 2018 
 
 cd "${MAMEDIR}"
 if ("$#" == "0") then             # To start MAME without any game 
