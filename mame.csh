@@ -31,4 +31,3 @@ cd -
 
 unset MAMEDIR
 unset AMSUPPORTDIR
-
