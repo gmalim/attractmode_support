@@ -1,19 +1,13 @@
 #!/usr/bin/python -tt
 """
-Program to generate MAME emulation benchmarks of a single game or a list of games.
+Program to generate MAME emulation benchmarks of a single game or a list of games. For each game:
+- User is asked to enter a benchmark timeperiod (default is 60 secs)
+- Benchmarks are generated and saved in a dedicated MAME benchmarks directory (${MAMEconfigdir}/benchmarks).
 
 Usage:
 
-1) Change the following three directories according to your setup:
-"""
-
-MAMEexecdir   = "${HOME}/Games/SDLMAME v0.193 64-bit/" # Directory containing your MAME executable
-MAMEconfigdir = "${HOME}/Games/SDLMAME Config/"        # Directory containing your MAME config files
-AMconfigdir   = "${HOME}/Games/Attract-Mode Config/"   # Directory containing your Attract-Mode config files
-
-"""
-2) Create a directory called "benchmarks" in your ${MAMEconfigdir}
-3) To process a single game, type: 
+1) Change configsetup.py according to your system setup.
+2) To process a single game, type: 
    ./benchmarkgenerator.py {game}
    where {game} is the romname of the game (e.g. pacman) 
 OR to process all games in your Attract-Mode MAME romlist, type:
@@ -23,11 +17,10 @@ Author: Gordon Lim
 Last Edit: 26 Jan 2018 
 """
 
+import configsetup
+import os
 import subprocess
 import sys
-
-MAMEromdir       = MAMEexecdir   + "roms/"
-MAMEbenchmarkdir = MAMEconfigdir + "benchmarks/"
 
 def generatebenchmark(game, benchmarktimeperiod):
 
@@ -38,7 +31,7 @@ def generatebenchmark(game, benchmarktimeperiod):
     command = ["./mame64", "-str", benchmarktimeperiod, game]
 
     benchmarkfile = open(MAMEbenchmarkdir + game + "_lastgame.log", "w")
-    subprocess.call(command, cwd = MAMEexecdir, stdout = benchmarkfile)
+    subprocess.call(command, cwd = configsetup.MAMEexecdir, stdout = benchmarkfile)
     benchmarkfile.close()
     
     print("------ New MAME benchmark file for {} generated!".format(game))
@@ -47,53 +40,36 @@ def generatebenchmark(game, benchmarktimeperiod):
 
 def main():
 
-    # Check directories:
+    # Setup configuration:
+    
+    configsetup.init()
 
-    if not os.path.isdir(MAMEconfigdir):
-        print("MAME config directory does not exist  - EXIT")
-        return 1
+    global MAMEbenchmarkdir
     
-    if not os.path.isdir(AMconfigdir):
-        print("AM config directory does not exist  - EXIT")
-        return 1
-    
-    if not os.path.isdir(MAMEexecdir):
-        print("MAME exec directory does not exist  - EXIT")
-        return 1
+    MAMEbenchmarkdir = configsetup.MAMEconfigdir + "benchmarks/"
 
-    if not os.path.isdir(MAMEromdir):
-        print("MAME rom directory does not exist  - EXIT")
-        return 1
-    
     if not os.path.isdir(MAMEbenchmarkdir):
-        print("MAME benchmark directory does not exist  - EXIT")
-        return 1
+        subprocess.call(["mkdir", "benchmarks"], cwd = configsetup.MAMEconfigdir)
+        if not os.path.isdir(MAMEbenchmarkdir):
+            print("ERROR: MAME benchmark directory does not exist  - EXIT")
+            return 1
     
-    # Input:
+    # Check input and process game(s):
     
     inputargument = sys.argv[1]
 
     benchmarktimeperiod = raw_input('Enter benchmark running time in seconds (default: 60 secs) and press return/enter: ') or '60'
     
     if (inputargument == 'all'):
-        
+
         # Transform AM romlist into list of games:
+
+        games, header = configsetup.create_list_of_games_from_romlist()
     
-        filename = AMconfigdir + 'romlists/mame.txt'
-        file = open(filename, 'r')
-        firstline = file.readline()
-                
-        games = []
-        for line in file.readlines():
-            game = [field for field in line.rstrip('\n').split(";")]
-            games.append(game[0])
-            
-        file.close()
-    
-        # Create MAME speed file for each game:
+        # Create MAME benchmark file for each game:
         
         for game in games:
-            generatebenchmark(game, benchmarktimeperiod)
+            generatebenchmark(game[0], benchmarktimeperiod)
                         
     else:
         generatebenchmark(inputargument, benchmarktimeperiod)

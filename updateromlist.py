@@ -1,40 +1,37 @@
 #!/usr/bin/python -tt
 """
 Program to update Attract-Mode MAME romlist with additional game data:
-- Change 'AltTitle' field to display title
-- Change 'Extra' field to formatted bezel dimensions string, 
-  as provided by bezeldimensions.dat
-- Change 'Buttons' field to sortable title and update 'AltTitle' field if game is part of a series,
-  as provided by specialgames.dat
+
+- Replace 'AltTitle' with updated title (parentheses removed, leading "The" removed, etc)
+- Replace 'Extra' with formatted bezel dimensions string, as provided by bezeldimensions.txt (see analyzebezels.py)
+- Replace 'Buttons' with sortable title and update 'AltTitle' if game is part of a series, as provided by 
+  sortanddisplaytitles.txt (create by hand)
 
 Usage:
 
-1) Copy this program, specialgames.dat (if available) and bezeldimensions.dat (if available) to
-   your Attract-Mode romlist directory (i.e. the directory that contains the 'mame.txt' romlist)
-2) Change 'attractmodeexecutable' variable according to your setup:
-"""
-
-attractmodeexecutable = "/Users/uci/Games/Attract-Mode v2.3.0/attract" 
-
-"""
-3) In a terminal, cd to your Attract-Mode romlist directory and type: 
+1) Change configsetup.py according to your system setup.
+2) If you want to use bezels in your Attract-Mode layout, use bezelanalysis.py to create bezeldimensions.txt.
+3) If you want to change the order of specific games in Attract-Mode, create/update sortanddisplaytitles.txt file 
+   by hand. You can also indicate specific games are part of a series.
+4) In a terminal, cd to your Attract-Mode romlist directory and type: 
    ./updateromlist.py
-4) Type y/n if you want Attract-Mode to create a new romlist first (y), or process your old romlist (n).
+5) Type y/n if you want Attract-Mode to create a new romlist first (y), or process your old romlist (n).
 
 Author: Gordon Lim
-Last Edit: 19 Jan 2018 
+Last Edit: 26 Jan 2018 
 """
 
 # Setup environment variables:
 
-bezeldimensionsfilename = "bezeldimensions.dat"
-specialgamesfilename    = "specialgames.dat"
+#filename_bezeldimensions      = "bezeldimensions.txt"
+filename_bezeldimensions      = "bezeldimensions_GOOD.txt"
+filename_sortanddisplaytitles = "sortanddisplaytitles.txt"
 
+import configsetup
 import subprocess
 import os
-from shutil import copy2
 
-# Update AltTitle field with new display title:
+# Update 'AltTitle' field in romlist with new display title:
 
 def update_AltTitle_field(game):
 
@@ -63,21 +60,21 @@ def update_AltTitle_field(game):
             
     return
 
-# Update Extra field with formatted bezel dimensions string
+# Update 'Extra' field in romlist with formatted bezel dimensions string
 
 def update_Extra_field(game): 
 
     # Read bezel dimensions from file:
         
-    file = open(bezeldimensionsfilename, 'r')
-    firstline = file.readline() # skip first line
+    file_bezeldimensions = open(filename_bezeldimensions, 'r')
+    file_bezeldimensions.readline() # skip first line
 
     bezels = []
-    for line in file.readlines():
+    for line in file_bezeldimensions.readlines():
         bezel = [field for field in line.rstrip('\n').split(";")]
         bezels.append(bezel)
 
-    file.close()
+    file_bezeldimensions.close()
 
     # Create formatted bezel dimenions string and update Extra field:
 
@@ -95,7 +92,8 @@ def update_Extra_field(game):
     
     return
 
-# Update Buttons field with new sorting title and update AltTitle with "series" display title (if available):
+# Update 'Buttons' field in romlist with new sorting title, and update
+# 'AltTitle' field with "series" display title (if available):
 
 def update_Buttons_and_AltTitle_fields(game):
     
@@ -104,27 +102,27 @@ def update_Buttons_and_AltTitle_fields(game):
 
     # Read special games data from file:
 
-    file = open(specialgamesfilename, 'r')
-    firstline = file.readline() # skip first line
+    file_sortanddisplaytitles = open(filename_sortanddisplaytitles, 'r')
+    file_sortanddisplaytitles.readline() # skip first line
 
-    specialgames = []
+    sortanddisplaytitles = []
 
-    for line in file.readlines():
-        specialgame = [field for field in line.rstrip('\n').split(";")]
-        specialgames.append(specialgame)
+    for line in file_sortanddisplaytitles.readlines():
+        sortanddisplaytitle = [field for field in line.rstrip('\n').split(";")]
+        sortanddisplaytitles.append(sortanddisplaytitle)
 
-    file.close()
+    file_sortanddisplaytitles.close()
 
     # Update sorting and display titles for special games:
     
-    for specialgame in specialgames:    
+    for sortanddisplaytitle in sortanddisplaytitles:    
 
-        if (specialgame[0] == game[0]):
-            sortingtitle = specialgame[1]
-            if (specialgame[2] == ''):
+        if (sortanddisplaytitle[0] == game[0]):
+            sortingtitle = sortanddisplaytitle[1]
+            if (sortanddisplaytitle[2] == ''):
                 displaytitle = game[14] 
             else:
-                displaytitle = specialgame[2] + ' ' + game[14]
+                displaytitle = sortanddisplaytitle[2] + ' ' + game[14]
                 
     # Remove "The" and "Vs." from sorting title:
            
@@ -140,89 +138,95 @@ def update_Buttons_and_AltTitle_fields(game):
  
     return
 
+# Update 'Title', 'Alttitle' and 'Buttons' fields in romlist for specific games:
+
+def update_exceptional_games(game):
+
+    if (game[0] == 'bm1stmix'):
+        game[1]  = 'Beatmania (ver JA-B)'
+        game[14] = 'Beatmania'
+        game[16] = 'Beatmania (ver JA-B)'
+        
+    if (game[0] == 'garou'):
+        game[1]  = 'Fatal Fury 9 / Garou - Mark of the Wolves (NGM-2530)'
+        game[14] = 'Fatal Fury 9 / Garou - Mark of the Wolves'
+        game[16] = 'Fatal Fury 9 / Garou - Mark of the Wolves (NGM-2530)'    
+
+    return
+
 def main():
 
+    # Setup configuration:
+    
+    configsetup.init()
+
+    AMromlist = configsetup.AMconfigdir + "romlists/mame.txt"
+
+    print(AMromlist)
+    
     # Check if romlist exists:
 
     romlistexists = False
-    if os.path.isfile('mame.txt'):
+    if os.path.isfile(AMromlist):
         romlistexists = True
         
     # Create new Attract-Mode MAME romlist or not:
 
-    createnewromlist = raw_input('Create new romlist? [y/n]: ')
+    createnewromlist = raw_input('Create new romlist? Press "y" or "n" and press enter/return: ')
 
     if (createnewromlist == 'y'):
         if romlistexists: # Remove old romlist:
-            subprocess.call(["rm", "mame.txt"]) 
-        subprocess.call([attractmodeexecutable, "--build-romlist", "mame"])
-        copy2('mame.txt', 'mame_ORIG.txt') # Create backup romlist
+            subprocess.call(["rm", AMromlist]) 
+        subprocess.call("./attract --build-romlist mame", cwd = configsetup.AMexecdir, shell = True) # Create new romlist
+        subprocess.call(["cp", AMromlist, AMromlist[:-4] + "_original.txt"])                         # Backup new romlist
     elif (createnewromlist == 'n'):
         if not romlistexists:
             print("Romlist does not exist in this directory - EXIT")
             return 1
-        if os.path.isfile('mame_ORIG.txt'): # Use backup romlist:
-            copy2('mame_ORIG.txt', 'mame.txt')
+        if os.path.isfile(AMromlist + ".original"): # Use backup romlist: 
+            subprocess.call(["cp", AMromlist[:-4] + "_original.txt", AMromlist]) 
     else:
         print("Next time please type 'y' or 'n'")
         return 2
-    
-    # Parse romlist into list of games:
-    
-    filename = 'mame.txt'
-    file = open(filename, 'r')
-    firstline = file.readline()
 
-    games = []
-    for line in file.readlines():
-        game = [field for field in line.rstrip('\n').split(";")]
-        games.append(game)
+    # Transform AM romlist into list of games:
 
-    file.close()
-    
+    games, header = configsetup.create_list_of_games_from_romlist()
+
     # Update fields in list of games:
 
     bezeldimensionsfile_exists = False
-    if os.path.isfile(bezeldimensionsfilename):
+    if os.path.isfile(filename_bezeldimensions):
         bezeldimensionsfile_exists = True
     else:
-        print("--- bezeldimensions.dat does not exist in this directory, skipping update of Extra field")
+        print("--- bezeldimensions.txt does not exist in this directory, skipping update of Extra field")
 
-    specialgamesfile_exists = False
-    if os.path.isfile(specialgamesfilename):
-        specialgamesfile_exists = True
+    sortanddisplaytitlesfile_exists = False
+    if os.path.isfile(filename_sortanddisplaytitles):
+        sortanddisplaytitlesfile_exists = True
     else:
-        print("--- specialgames.dat does not exist in this directory, skipping update of Buttons and AltTitle fields")
+        print("--- sortanddisplaytitles.txt does not exist in this directory, skipping update of Buttons and AltTitle fields")
 
     for game in games:
-        
-        # Update 'AltTitle' field with display title:
+
+        # Update 'AltTitle' field in romlist:
         update_AltTitle_field(game)
 
-        # Update 'Extra' field with formatted bezel dimensions string:
+        # Update 'Extra' field in romlist:
         if (bezeldimensionsfile_exists):
             update_Extra_field(game)
                     
-        # Update 'Buttons' field with sorting title, and 'AltTitle' field with "series" display title:
-        if (specialgamesfile_exists):
+        # Update 'Buttons' and 'AltTitle' fields in romlist:
+        if (sortanddisplaytitlesfile_exists):
             update_Buttons_and_AltTitle_fields(game)
 
-        # Exceptions:
-
-        if (game[0] == 'bm1stmix'):
-            game[1]  = 'Beatmania (ver JA-B)'
-            game[14] = 'Beatmania'
-            game[16] = 'Beatmania (ver JA-B)'
-            
-        if (game[0] == 'garou'):
-            game[1]  = 'Fatal Fury 9 / Garou - Mark of the Wolves (NGM-2530)'
-            game[14] = 'Fatal Fury 9 / Garou - Mark of the Wolves'
-            game[16] = 'Fatal Fury 9 / Garou - Mark of the Wolves (NGM-2530)'    
+        # Update romlist for specific games:
+        update_exceptional_games(game)
         
     # Create updated romlist:
 
-    file = open(filename, 'w')
-    file.write(firstline)
+    outputfile = open(AMromlist, 'w')
+    outputfile.write(header)
 
     for game in games:
 
@@ -231,9 +235,9 @@ def main():
             continue
         
         line = ";".join(game)
-        file.write(line + '\n')
+        outputfile.write(line + '\n')
 
-    file.close()
+    outputfile.close()
         
     return 0
 
