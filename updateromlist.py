@@ -162,8 +162,6 @@ def main():
 
     AMromlist = configsetup.AMconfigdir + "romlists/mame.txt"
 
-    print(AMromlist)
-    
     # Check if romlist exists:
 
     romlistexists = False
