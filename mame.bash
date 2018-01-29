@@ -18,19 +18,17 @@ AMSUPPORTDIR="${HOME}/Programming/attractmode_support/" # Your 'attractmode_supp
 # 4) Open a terminal and type: mame {game}
 #
 # Author: Gordon Lim
-# Last Edit: 27 Jan 2018 
+# Last Edit: 29 Jan 2018 
 
 cd "${MAMEDIR}"
-if [ "$#" == "0" ]; then         # To start MAME without any game 
-    ./mame64
-elif [ "$1" = "-listxml" ]; then # To accommodate Attract-Mode's --build-romlist option
-    ./mame64 $1
-else                             # To start a game
+if [ "$#" == "1" ] && [ -f "${MAMEDIR}/roms/$1.zip" ]; then
     ./mame64 $1 > /Users/uci/Games/SDLMAME\ Config/benchmarks/$1_lastgame.log
     ${AMSUPPORTDIR}/hiscoreanalysis.py   $1
     ${AMSUPPORTDIR}/benchmarkanalysis.py $1
+else
+    ./mame64 "$@"
 fi
-cd -
+cd - > /dev/null
 
 unset MAMEDIR
 unset AMSUPPORTDIR
