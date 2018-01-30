@@ -2,42 +2,50 @@
 
 This repository contains a collection of programs that provides [MAME](http://www.mamedev.org/) support for the [Attract-Mode](http://www.attractmode.org/) frontend:
 
-- [MAME hiscore support for Attract-Mode](#hiscore) ([*hiscoreanalysis.py*](hiscoreanalysis.py))
-- [MAME benchmark support for Attract-Mode](#bench) ([*benchmarkgenerator.py*](benchmarkgenerator.py) and [*benchmarkanalysis.py*](benchmarkanalysis.py))
-- [MAME bezel artwork support for Attract-Mode](#bezel) ([*bezelanalysis.py*](bezelanalysis.py))
-- [MAME controls support for Attract-Mode](#control) ([*controlanalysis.py*](controlanalysis.py))
-- [MAME title display and sorting support for Attract-Mode](#title) ([*updateromlist.py*](updateromlist.py))
-- [MAME startup scripts](#start) ([*mame.bash*](mame.bash) and [*mame.csh*](mame.csh))
-- [New Attract-Mode layout with above functionality](#layout) ([*mylayout*](mylayout))
-
+- [MAME hiscore support for Attract-Mode](#hiscore)
+- [MAME benchmark generator](#benchgen)
+- [MAME benchmark support for Attract-Mode](#benchana)
+- [MAME bezel artwork support for Attract-Mode](#bezel)
+- [MAME controls support for Attract-Mode](#control)
+- [MAME title display and sorting support for Attract-Mode](#title)
+- [MAME startup scripts](#start)
+- [New Attract-Mode layout with above functionality](#layout)
 
 ---
 <a name="hiscore" />
 
 ### MAME hiscore support for Attract-Mode: [*hiscoreanalysis.py*](hiscoreanalysis.py)
 
-Python program to get hiscores of a single game or a list of games. For each game:
+Python program to process hiscores of a single game or a list of games. For each game:
 
-- Convert hiscores to ASCII code using the [*hi2txt*](http://greatstone.free.fr/hi2txt/) Java archive
-- Save hiscores in formatted ASCII files in a dedicated Attract-Mode *hiscores* directory. 
-- This allows hiscores to be displayed in any Attract-Mode layout using the *file-format* module.
+- Convert binary hiscores to ASCII using the [***hi2txt***](http://greatstone.free.fr/hi2txt/) Java archive
+- Save hiscores in a formatted ASCII file: *AMhiscores.ini* 
+- This allows hiscores to be displayed in Attract-Mode
 
 Requirements:
 
-- *hi2txt.jar* and *hi2txt.zip*: [*http://greatstone.free.fr/hi2txt*](http://greatstone.free.fr/hi2txt/)
-- *Java*: [*https://www.java.com*](https://www.java.com)
-- *hiscore.dat*: [*http://highscore.mameworld.info/*](http://highscore.mameworld.info/)
+- *hi2txt.jar* and *hi2txt.zip*: [http://greatstone.free.fr/hi2txt](http://greatstone.free.fr/hi2txt/)
+- Java: [https://www.java.com](https://www.java.com)
+- *hiscore.dat*: [http://highscore.mameworld.info/](http://highscore.mameworld.info/)
 
-<a name="bench" />
+<a name="benchgen" />
 
-### MAME benchmark support for Attract-Mode: [*benchmarkgenerator.py*](benchmarkgenerator.py) and [*benchmarkanalysis.py*](benchmarkanalysis.py)
+### MAME benchmark generator: [*benchmarkgenerator.py*](benchmarkgenerator.py)
 
-Python program to generate and analyze MAME benchmark files of a single game or a list of games. For each game:
+Python program to generate MAME benchmark files of a single game or a list of games. Benchmarks are saved in a dedicated MAME *benchmarks* directory.
 
-- Calculate average emulation speed and total emulation time by taking into account previous benchmark data. 
-- Convert average emulation speed in to a 1-5 star rating.
-- Convert MAME benchmark files into formatted ASCII files in a dedicated Attract-Mode *benchmarks* directory. 
-- This allows benchmark data to be displayed in any Attract-Mode layout using the *file-format* module. 
+<a name="benchana" />
+
+### MAME benchmark support for Attract-Mode: [*benchmarkanalysis.py*](benchmarkanalysis.py)
+
+Python program to analyze MAME benchmark files of a single game or a list of games. For each game:
+
+- Average emulation speed and total emulation time is calculated by taking into account the benchmark from the last game and
+  the previous benchmark.
+- The previous benchmark is updated and saved in a dedicated MAME *benchmarks* directory.
+- Convert average emulation speed in to a 1-5 star rating. 
+- Save benchmark data in a formatted ASCII file: *AMbenchmarks.ini*
+- This allows benchmark data to be displayed in Attract-Mode.  
 
 <a name="bezel" />
 
@@ -45,12 +53,16 @@ Python program to generate and analyze MAME benchmark files of a single game or 
 
 Python program to analyze MAME bezel artwork:
 
-- Creates a list of symbolic links to bezel art and saves bezel data in a formatted ASCII file
-- This allows bezel artwork to be displayed in any Attract-Mode layout using the *file-format* module.
+- Analysis is based on the standard .lay file structure as defined [here](http://wiki.mamedev.org/index.php/LAY_File_Basics_-_Part_I)
+- A lower resolution version of each bezel is saved in a dedicated *AMbezels* directory
+- Bezel data is reformatted and saved in a formatted ASCII file: *AMbezels.ini*
+- This allows bezel artwork to be displayed in Attract-Mode.
 
 Requirements:
 
-- Bezel artwork, e.g. [*http://www.progettosnaps.net/artworks/*](http://www.progettosnaps.net/artworks/)
+- Bezel artwork, e.g. [http://www.progettosnaps.net/artworks/](http://www.progettosnaps.net/artworks/)
+- Each bezel artwork .zip file should be unzipped in a corresponding directory (use [*unziplist.bash*](unziplist.bash))
+- Sips: An command-line image processing tool that is standard installed on Mac OS X. For Linux and Windows users, a great free alternative is [ImageMagick](https://www.imagemagick.org) - just install and change the code accordingly.
 
 <a name="control" />
 
@@ -58,12 +70,12 @@ Requirements:
 
 Python program to analyze game controls:
 
-- Control data is saved in a formatted ASCII file
-- This allows game controls to be displayed in any Attract-Mode layout using the *file-format* module.
+- Control data is reformatted and saved in a formatted ASCII file: *AMcontrols.ini*
+- This allows game controls to be displayed in Attract-Mode.
 
 Requirements:
 
-- *controls.ini*, e.g. [*http://ledblinky.net/downloads/controls.ini.0.141.1.zip*](http://ledblinky.net/downloads/controls.ini.0.141.1.zip)
+- *controls.ini*, e.g. [http://ledblinky.net/downloads/controls.ini.0.141.1.zip](http://ledblinky.net/downloads/controls.ini.0.141.1.zip)
 
 <a name="title" />
 
@@ -71,8 +83,10 @@ Requirements:
 
 Python program to update Attract-Mode MAME romlist with additional game data:
 
-- Replace *AltTitle* with display title
-- Replace *Buttons* with sortable title
+- Replace *AltTitle* field with display title
+- Replace *Buttons* field with sortable title
+- Replace *Extra* field with formatted tag to indicate whether there is hiscore, benchmark, bezel and/or controls data available
+- The latter allows hiscore, benchmark, bezel and controls data availability to be used in Attract-Mode filters.
 
 <a name="start" />
 
@@ -86,16 +100,16 @@ Startup scripts to automate the execution of [*hiscoreanalysis.py*](hiscoreanaly
 
 New Attract-Mode layout which uses the above functionality:
 
-- Current hiscore displayed for each game (if available)
+- Current hiscore displayed for each game
 - Current benchmark displayed for each game
-- Bezel artwork displayed for each game (if available)
-- Controls displayed for each game (if available)
-- Custom titles
+- Bezel artwork displayed for each game
+- Controls information displayed for each game
+- Custom display and sorting titles
 
 Requirements:
 
-- hiscores.ini as generated by [*hiscoreanalysis.py*](hiscoreanalysis.py)
-- benchmarks.ini as generated by [*benchmarkanalysis.py*](benchmarkanalysis.py)
-- bezels.ini as generated by [*bezelanalysis.py*](bezelanalysis.py)
-- controls_reformatted.ini as generated by [*controlanalysis.py*](controlanalysis.py)
+- *AMhiscores.ini* as generated by [*hiscoreanalysis.py*](hiscoreanalysis.py)
+- *AMbenchmarks.ini* as generated by [*benchmarkanalysis.py*](benchmarkanalysis.py)
+- *AMbezels.ini* as generated by [*bezelanalysis.py*](bezelanalysis.py)
+- *AMcontrols.ini* as generated by [*controlanalysis.py*](controlanalysis.py)
 - updated romlist as generated by [*updateromlist.py*](updateromlist.py)
