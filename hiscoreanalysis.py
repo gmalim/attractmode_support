@@ -2,8 +2,9 @@
 """
 Program to get hiscores from a single game or a list of games. For each game:
 - Hiscores are readout using the 'hi2txt' Java archive (see http://greatstone.free.fr/hi2txt/).
-- Hiscores are reformatted and saved in a dedicated Attract-Mode hiscores directory (${AMconfigdir}/hiscores). 
-- This allows hiscores to be displayed in any Attract-Mode layout using the 'file-format' module.
+- The hi2txt output is saved in a dedicated MAME hiscores directory (${MAMEconfigdir}/hiscores).
+- The top hiscore is reformatted and saved in a formatted ASCII file: AMhiscores.ini
+- This allows hiscores to be displayed in Attract-Mode layouts by using the 'file-format' module.
 
 Requirements:
 
@@ -24,7 +25,7 @@ OR to process all games in your Attract-Mode MAME romlist, type:
    ./hiscoreanalysis.py all
 
 Author: Gordon Lim
-Last Edit: 26 Jan 2018 
+Last Edit: 30 Jan 2018 
 """
 
 import configsetup
@@ -46,33 +47,35 @@ def createhiscorefile(game):
 
     # Check if nvram/game/ or hi/game.hi exists in MAME directory:
 
-    hiscorefile = configsetup.MAMEconfigdir
+    MAMEbinaryhiscorefile = configsetup.MAMEconfigdir
     
-    if os.path.isdir(hiscorefile + 'nvram/' + game):
-        hiscorefile += 'nvram/' + game
+    if os.path.isdir(MAMEbinaryhiscorefile + 'nvram/' + game):
+        MAMEbinaryhiscorefile += 'nvram/' + game
         print("------ nvram/{}/ exists...".format(game))
-    elif os.path.isfile(hiscorefile + 'hi/' + game + '.hi'):
-        hiscorefile += 'hi/' + game + '.hi'
+    elif os.path.isfile(MAMEbinaryhiscorefile + 'hi/' + game + '.hi'):
+        MAMEbinaryhiscorefile += 'hi/' + game + '.hi'
         print("------ hi/{}.hi exists...".format(game))
     else:
         print("------ nvram/{0} nor hi/{0}.hi exists => this game has not been played yet => EXIT2".format(game))
         return 2
 
-    # Run Java on hi2txt.jar and pipe output to temporary txt file:
+    # Run Java on hi2txt.jar and save output in MAME hiscores directory:
+
+    MAMEhiscorefilename = MAMEhiscoredir + game + ".ini"
+    MAMEhiscorefile = open(MAMEhiscorefilename, 'w')
     
-    command = ["java", "-jar", hi2txtdir + "hi2txt.jar", "-r", hiscorefile, "-hiscoredat", hiscoredat,
+    command = ["java", "-jar", hi2txtdir + "hi2txt.jar", "-r", MAMEbinaryhiscorefile, "-hiscoredat", hiscoredat,
                "-keep-field", 'RANK', 
                "-keep-field", 'SCORE',
                "-keep-field", 'NAME'] 
 
-    tmpfile = open("tmp.txt", "w")
-    subprocess.call(command, stdout=tmpfile)
-    tmpfile.close()
-    
+    subprocess.call(command, stdout=MAMEhiscorefile)
+    MAMEhiscorefile.close()
+
     # Read temporary txt file containing hi2txt output and check hiscore table structure:
 
-    tmpfile = open("tmp.txt", "r")    
-    firstline = tmpfile.readline()
+    MAMEhiscorefile = open(MAMEhiscorefilename, "r")    
+    firstline = MAMEhiscorefile.readline()
     hiscoretablefields = firstline.rstrip('\n').split('|')
 
     if (len(firstline) == 0):
@@ -88,7 +91,7 @@ def createhiscorefile(game):
     # Create hiscore list:
     
     scores = []
-    for line in tmpfile.readlines():
+    for line in MAMEhiscorefile.readlines():
         score = [field for field in line.rstrip('\n').split('|')]
         if (len(score) < 2): # remove anomalous entries
             continue
@@ -96,21 +99,37 @@ def createhiscorefile(game):
             score.append("   ")
         scores.append(score[0:3])
     
-    tmpfile.close()
-    subprocess.call(["rm","tmp.txt"])
-    
-    # Create formatted .ini file to be used by the Attract-Mode 'file-format' module:
-    
-    AMhiscorefilename = AMhiscoredir + game + ".ini"
+    MAMEhiscorefile.close()
+
+    # Save top hiscore in AMhiscores.ini:
+
+    AMhiscorefilename = configsetup.AMsupportdir + "AMhiscores.ini"
+
+    AMhiscorefilename_exists = False
+    if os.path.isfile(AMhiscorefilename):
+        AMhiscorefilename_exists = True
+        AMhiscorefile = open(AMhiscorefilename, 'r')
+        lines = []
+        while True:
+            line = AMhiscorefile.readline()
+            if not line:
+                break
+            if (line == "[{}]\n".format(game)):
+                dummy = AMhiscorefile.readline() # skip score
+                dummy = AMhiscorefile.readline() # skip name
+            else:
+                lines.append(line)
+        AMhiscorefile.close()
+        
     AMhiscorefile = open(AMhiscorefilename, 'w')
-
-    for score in scores:
-        AMhiscorefile.write("[Score_{}]\n".format(score[0]))
-        AMhiscorefile.write("score={}\n".format(score[1]))
-        AMhiscorefile.write("name={}\n".format(score[2]))
-
+    if AMhiscorefilename_exists:
+        for line in lines:
+            AMhiscorefile.write(line)
+    AMhiscorefile.write("[{}]\n".format(game))
+    AMhiscorefile.write("score={}\n".format(scores[0][1]))
+    AMhiscorefile.write("name={}\n".format(scores[0][2]))
     AMhiscorefile.close()
-
+   
     print("------ AM hiscore file for {} created => SUCCESS".format(game))
         
     return 0
@@ -123,13 +142,13 @@ def main():
 
     global hi2txtdir
     global hi2txtzipdir
-    global AMhiscoredir
     global hiscoredat
+    global MAMEhiscoredir
     
-    hi2txtdir     = configsetup.MAMEconfigdir + "hi2txt/"
-    hi2txtzipdir  = hi2txtdir                 + "hi2txt_zip_contents/"
-    AMhiscoredir  = configsetup.AMconfigdir   + "hiscores/"
-    hiscoredat    = configsetup.MAMEconfigdir + "dats/hiscore.dat"
+    hi2txtdir      = configsetup.MAMEconfigdir + "hi2txt/"
+    hi2txtzipdir   = hi2txtdir                 + "hi2txt_zip_contents/"
+    hiscoredat     = configsetup.MAMEconfigdir + "dats/hiscore.dat"
+    MAMEhiscoredir = configsetup.MAMEconfigdir + "hiscores/"
 
     if not os.path.isdir(hi2txtdir):
         print("MAME hi2txt directory does not exist - EXIT")
@@ -139,14 +158,15 @@ def main():
         print("MAME hi2txt_zip_contents directory does not exist - EXIT")
         return 1
 
-    if not os.path.isdir(AMhiscoredir):
-        subprocess.call(["mkdir", "hiscores"], cwd = configsetup.AMconfigdir)
-        if not os.path.isdir(AMhiscoredir):
-            print("ERROR: AM hiscores directory does not exist - EXIT")
-    
     if not os.path.isfile(hiscoredat):
         print("MAME hiscore.dat does not exist - EXIT")
         return 1
+
+    if not os.path.isdir(MAMEhiscoredir):
+        subprocess.call(["mkdir", "hiscores"], cwd = configsetup.MAMEconfigdir)
+        if not os.path.isdir(MAMEhiscoredir):
+            print("ERROR: AM hiscores directory does not exist - EXIT")
+            return 1
     
     # Check input and process game(s):
     
@@ -157,7 +177,11 @@ def main():
         # Transform AM romlist into list of games:
 
         games, header = configsetup.create_list_of_games_from_romlist()
-            
+        
+        if (len(games) == 0):
+            print("AM romlist is empty - EXIT")
+            return 1
+
         # Create hiscore file for each game:
 
         counts = [0, 0, 0, 0, 0, 0]

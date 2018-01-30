@@ -14,7 +14,7 @@ OR to process all games in your Attract-Mode MAME romlist, type:
    ./benchmarkgenerator.py all
 
 Author: Gordon Lim
-Last Edit: 26 Jan 2018 
+Last Edit: 30 Jan 2018 
 """
 
 import configsetup
@@ -66,6 +66,10 @@ def main():
 
         games, header = configsetup.create_list_of_games_from_romlist()
     
+        if (len(games) == 0):
+            print("AM romlist is empty - EXIT")
+            return 1
+
         # Create MAME benchmark file for each game:
         
         for game in games:

@@ -5,25 +5,32 @@ Program to setup attractmode_support configuration.
 Change the following directories according to your system setup:
 """
 
-myMAMEconfigdir = "${HOME}/.mame/"                       # Directory containing your MAME configuration files
-myAMconfigdir   = "${HOME}/.attract/"                    # Directory containing your Attract-Mode configuration files
-myMAMEexecdir   = "${HOME}/Games/SDLMAME v0.193 64-bit/" # Directory containing your MAME executable
-myAMexecdir     = "${HOME}/Games/attract/"               # Directory containing your Attract-Mode executable
+myAMsupportdir  = "${HOME}/Programming/attractmode_support/" # Your attractmode_support directory
+myMAMEconfigdir = "${HOME}/.mame/"                           # Directory containing your MAME configuration files
+myAMconfigdir   = "${HOME}/.attract/"                        # Directory containing your Attract-Mode configuration files
+myMAMEexecdir   = "${HOME}/Games/SDLMAME v0.193 64-bit/"     # Directory containing your MAME executable
+myAMexecdir     = "${HOME}/Games/attract/"                   # Directory containing your Attract-Mode executable
 
 import os
 
 def init():
 
+    global AMsupportdir    
     global MAMEconfigdir 
     global AMconfigdir  
     global MAMEexecdir    
-    global AMexecdir    
+    global AMexecdir
 
+    AMsupportdir  = os.path.expandvars(myAMsupportdir)
     MAMEconfigdir = os.path.expandvars(myMAMEconfigdir) 
     AMconfigdir   = os.path.expandvars(myAMconfigdir)
     MAMEexecdir   = os.path.expandvars(myMAMEexecdir)
     AMexecdir     = os.path.expandvars(myAMexecdir)
     
+    if not os.path.isdir(AMsupportdir):
+        print("attractmode_support directory does not exist  - EXIT")
+        exit
+        
     if not os.path.isdir(MAMEconfigdir):
         print("MAME config directory does not exist  - EXIT")
         exit
