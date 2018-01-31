@@ -1,22 +1,19 @@
 #!/usr/bin/python -tt
 """
-
 ======
 TO DO: 
 
-0) Search for bezel png file: 
-   Check if more than one hit. 
-   If more than one found, analyze which one should be used - right now the first found is used? 
-   If no hits, just search for '(\w+.png)'. 
-   If only one is found, that one has to be the bezel
-   If more than one found, analyze which one should be used. If you do nothing the first one found is used?
-
-1) Change AM to use bezellinks instead of fanart dir
+Search for bezel png file: 
+Check if more than one hit. 
+If more than one found, analyze which one should be used - right now the first found is used. 
+If no hits, just search for '(\w+.png)'. 
+If only one is found, that one has to be the bezel
+If more than one found, analyze which one should be used. If you do nothing the first one found is used?
 ======
 
 Program to analyze unzipped MAME bezels:
 - Analysis is based on the .lay file structure as defined here: http://wiki.mamedev.org/index.php/LAY_File_Basics_-_Part_I
-- A lower resolution version of each bezel is saved in a dedicated AM bezels directory
+- A lower resolution version of each bezel or a symbolic link to each bezel is saved in a dedicated AM bezels directory.
 - Bezel data is reformatted and saved in a formatted ASCII file: AMbezels.ini
 - This allows bezels to be displayed in Attract-Mode layouts by using the 'file-format' module.
 
@@ -30,12 +27,13 @@ myMAMEbezeldir = "${HOME}/Games/Arcade Art/bezel/artwork_pS_official/" # Directo
 myAMbezeldir   = "${HOME}/Games/Arcade Art/bezel/AMbezels/"            # Directory where AM bezels will be saved
 
 """
-3) Make sure artwork in $MAMEbezeldir is unzipped, otherwise copy unziplist.sh to $MAMEbezeldir, cd to this directory
+3) Make sure artwork in $myMAMEbezeldir is unzipped, otherwise copy unziplist.sh to $myMAMEbezeldir, cd to this directory
    and type: ./bash unziplist.sh (Note: unzipping bezel artwork costs hardly any extra diskspace)
-4) In a terminal, type: ./bezelanalysis.py
+4) Provide optional bezelexceptions.txt file for excluded games
+5) In a terminal, type: ./bezelanalysis.py
 
 Author: Gordon Lim
-Last Edit: 30 Jan 2018 
+Last Edit: 31 Jan 2018 
 """
 
 import configsetup
@@ -67,24 +65,45 @@ def main():
             return 1
         else:
             print("AM bezels will be saved in {}...".format(AMbezeldir))
-        
+
     # Get user input:
 
-    #inputargument = sys.argv[1]
+    clearAMbezels = raw_input('Remove all .png files in the AM bezel directory? Press "y" or "n" followed by return/enter: ')
 
-    AMbezelresolution = raw_input('Enter maximum AM bezel resolution for width or height - whichever is largest - in number of pixels (default: 800 pixels) and press return/enter: ') or '800'
+    if not ((clearAMbezels == 'y') or (clearAMbezels == 'n')):
+        print("Next time please type 'y' or 'n'")
+        return 1
 
-    if ((int(AMbezelresolution) < 0) or (int(AMbezelresolution) > 2000)):
-        check = raw_input('AM bezel resolution is set to {}. Are you sure? Press "n" followed by return/enter if you want to quit: '.format(AMbezelresolution))
-        if (check == 'n'):
-            return 1
+    if clearAMbezels:
+        subprocess.call('rm *.png', cwd = AMbezeldir, shell = True)
+        
+    rescale = raw_input('Create low-resolution bezels? Press "y" or "n" followed by return/enter: ')
+
+    if not ((rescale == 'y') or (rescale == 'n')):
+        print("Next time please type 'y' or 'n'")
+        return 1
+
+    if not os.path.isfile('/usr/bin/sips'): # If Sips does not exist:
+        print("Sips is not installed on this system => Symbolic links to the original bezel images will be created instead...")
+        rescale = 'n'
+        
+    AMbezelresolution = 0
     
-    excludegenericbezels = raw_input('Exclude generic bezel art? Press "y" or "n" followed by return/enter: ')
+    if (rescale == 'y'):
+        
+        AMbezelresolution = raw_input('Enter maximum AM bezel resolution for width or height - whichever is largest - in number of pixels (default: 800 pixels) and press return/enter: ') or '800'
+
+        if ((int(AMbezelresolution) < 0) or (int(AMbezelresolution) > 2000)):
+            check = raw_input('AM bezel resolution is set to {}. Are you sure? Press "n" followed by return/enter if you want to quit: '.format(AMbezelresolution))
+            if (check == 'n'):
+                return 1
+
+    excludegenericbezels = raw_input('Exclude generic bezels? Press "y" or "n" followed by return/enter: ')
 
     if not ((excludegenericbezels == 'y') or (excludegenericbezels == 'n')):
         print("Next time please type 'y' or 'n'")
         return 1
-
+            
     # Transform AM romlist into list of games:
 
     games, header = configsetup.create_list_of_games_from_romlist()
@@ -111,7 +130,7 @@ def main():
 
     excludedgames = []
 
-    if (os.path.isdir(bezelexceptionsfilename)):
+    if (os.path.isfile(bezelexceptionsfilename)):
         bezelexceptionsfile = open(bezelexceptionsfilename, 'r')
         for line in bezelexceptionsfile.readlines():
             excludedgame = line.rstrip('\n')
@@ -223,20 +242,71 @@ def main():
             gameswithoutbezel.append(game)
             continue
 
-        x = matchobject.group(1)
-        y = matchobject.group(2)
-        w = matchobject.group(3)
-        h = matchobject.group(4)
+        x = float(matchobject.group(1))
+        y = float(matchobject.group(2))
+        w = float(matchobject.group(3))
+        h = float(matchobject.group(4))
 
-        # Copy .png file to ${AMbezeldir}, rename the file and change the resolution:
+        # Create low-resolution version of bezel or symbolic link to bezel:
         
-        oldpngfile = MAMEbezeldir + romname + "/" + bezelfilename
-        newpngfile = AMbezeldir + romname + ".png"
+        if (rescale):
+        
+            # Copy .png file to ${AMbezeldir}, rename the file and change the resolution:
+        
+            oldpngfile = MAMEbezeldir + romname + "/" + bezelfilename
+            newpngfile = AMbezeldir + romname + ".png"
+            
+            subprocess.call(["cp", oldpngfile, newpngfile])
+        
+            # Get original image pixel height:
+            
+            tmpfilename = configsetup.AMsupportdir + 'tmp.txt'
+            
+            tmpfile = open(tmpfilename, 'w')
+            subprocess.call(["sips", "-g", "pixelHeight", newpngfile], stdout = tmpfile)
+            tmpfile = open(tmpfilename, 'r')
+            sipsstring = tmpfile.read()
+            matchobject = re.search("pixelHeight:\s*(\d+)", sipsstring)
+            oldpixelheight = float(matchobject.group(1))
+            
+            # Change image resolution:
+            
+            FNULL = open(os.devnull, 'w')
+            subprocess.call(["sips", "-Z", AMbezelresolution, newpngfile], stdout = FNULL)
+            
+            # Get low-res image pixel height:
+            
+            tmpfile = open(tmpfilename, 'w')
+            subprocess.call(["sips", "-g", "pixelHeight", newpngfile], stdout = tmpfile)
+            tmpfile = open(tmpfilename, 'r')
+            sipsstring = tmpfile.read()
+            tmpfile.close()
+            matchobject = re.search("pixelHeight:\s*(\d+)", sipsstring)
+            newpixelheight = float(matchobject.group(1))
+            
+            subprocess.call(["rm", tmpfilename])
 
-        subprocess.call(["cp", oldpngfile, newpngfile])
-        FNULL = open(os.devnull, 'w')
-        subprocess.call(["sips", "-Z", AMbezelresolution, newpngfile], stdout = FNULL)
-        
+            # Rescale saved bezel data:
+            
+            x *= newpixelheight/oldpixelheight
+            y *= newpixelheight/oldpixelheight
+            w *= newpixelheight/oldpixelheight
+            h *= newpixelheight/oldpixelheight
+
+            print("------ low-resolution version of {}.png created...".format(romname))
+            
+        else: # Create symlink to bezel file:
+
+            source      = MAMEbezelsdir + romname + "/" + bezelfilename
+            destination = AMbezelsdir + romname + '.png' 
+            
+            try:
+                os.symlink(source, destination)
+            except OSError:
+                print("------ symlink to {}.png exists already".format(romname))
+            else:
+                print("------ symlink to {}.png created...".format(romname))
+
         # Save bezel data to bezels list:
 
         bezel = [romname, bezelfilename, x, y, w, h]

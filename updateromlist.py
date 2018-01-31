@@ -1,33 +1,28 @@
 #!/usr/bin/python -tt
 """
 Program to update Attract-Mode MAME romlist with additional game data:
-
 - Replace 'AltTitle' with updated title (parentheses removed, leading "The" removed, etc)
-- Replace 'Extra' with formatted bezel dimensions string, as provided by bezeldimensions.txt (see analyzebezels.py)
+- Replace 'Extra' with formatted tag to indicate whether hiscore, benchmark, bezel and/or controls data are available. 
+  This can be used to contruct Attract-Mode filters.
 - Replace 'Buttons' with sortable title and update 'AltTitle' if game is part of a series, as provided by 
-  sortanddisplaytitles.txt (create by hand)
+  AMtitles.txt (create by hand)
 
 Usage:
 
 1) Change configsetup.py according to your system setup.
-2) If you want to use bezels in your Attract-Mode layout, use bezelanalysis.py to create bezeldimensions.txt.
-3) If you want to change the order of specific games in Attract-Mode, create/update sortanddisplaytitles.txt file 
-   by hand. You can also indicate specific games are part of a series.
+2) Create/update AMtitles.txt in a text editor to change the order of specific games in Attract-Mode.
+   You can also indicate if specific games are part of a series.
+3) See README.md on how to create .ini files with hiscore, benchmark, bezel and/or controls data
 4) In a terminal, cd to your Attract-Mode romlist directory and type: 
    ./updateromlist.py
 5) Type y/n if you want Attract-Mode to create a new romlist first (y), or process your old romlist (n).
 
 Author: Gordon Lim
-Last Edit: 26 Jan 2018 
+Last Edit: 31 Jan 2018 
 """
 
-# Setup environment variables:
-
-#filename_bezeldimensions      = "bezeldimensions.txt"
-filename_bezeldimensions      = "bezeldimensions_GOOD.txt"
-filename_sortanddisplaytitles = "sortanddisplaytitles.txt"
-
 import configsetup
+import re
 import subprocess
 import os
 
@@ -60,69 +55,80 @@ def update_AltTitle_field(game):
             
     return
 
-# Update 'Extra' field in romlist with formatted bezel dimensions string
+# Update 'Extra' field in romlist with formatted string indicating
+# if hiscore, benchmark, bezel and controls data is available:
 
-def update_Extra_field(game): 
+def gameinfile(romname, filename):
 
-    # Read bezel dimensions from file:
-        
-    file_bezeldimensions = open(filename_bezeldimensions, 'r')
-    file_bezeldimensions.readline() # skip first line
+    file = open(filename, 'r')
+    text = file.read()
+    file.close()
 
-    bezels = []
-    for line in file_bezeldimensions.readlines():
-        bezel = [field for field in line.rstrip('\n').split(";")]
-        bezels.append(bezel)
+    matchobject = re.search('\[{}\]'.format(romname), text)
 
-    file_bezeldimensions.close()
+    if matchobject:
+        return 1
+    else:
+        return 0
 
-    # Create formatted bezel dimenions string and update Extra field:
-
-    game[15] = '' # game[15] = Extra
+def update_Extra_field(game, files_available):
     
-    for bezel in bezels:
-        if bezel[0] == game[0]:
-            encoded_str = str(bezel[2]) + "-" + \
-                          str(bezel[3]) + "-" + \
-                          str(bezel[4]) + "-" + \
-                          str(bezel[5])
-            game[15] = encoded_str
-        else:
-            continue
+    romname = game[0]
+
+    tags = [0, 0, 0, 0]
+    
+    if (files_available[0]):
+        tags[0] = gameinfile(romname, filename_hiscores)
+
+    if (files_available[1]):
+        tags[1] = gameinfile(romname, filename_benchmarks)
+
+    if (files_available[2]):
+        tags[2] = gameinfile(romname, filename_bezels)
+
+    if (files_available[3]):
+        tags[3] = gameinfile(romname, filename_controls)
+
+    encodedtag = ["Hi" + str(tags[0]), \
+                  "Bm" + str(tags[1]), \
+                  "Be" + str(tags[2]), \
+                  "Co" + str(tags[3])]
+    
+    game[15] = "-".join(encodedtag)
     
     return
 
-# Update 'Buttons' field in romlist with new sorting title, and update
-# 'AltTitle' field with "series" display title (if available):
+# Update 'Buttons' field in romlist with new sorting title,
+# and update 'AltTitle' field with "series" display title (if available):
 
 def update_Buttons_and_AltTitle_fields(game):
     
     sortingtitle = game[1]
     displaytitle = game[14]
 
-    # Read special games data from file:
+    # Read titles data from file:
 
-    file_sortanddisplaytitles = open(filename_sortanddisplaytitles, 'r')
-    file_sortanddisplaytitles.readline() # skip first line
+    file_titles = open(filename_titles, 'r')
+    file_titles.readline() # skip first line
 
-    sortanddisplaytitles = []
+    titles = []
 
-    for line in file_sortanddisplaytitles.readlines():
+    for line in file_titles.readlines():
         sortanddisplaytitle = [field for field in line.rstrip('\n').split(";")]
-        sortanddisplaytitles.append(sortanddisplaytitle)
+        titles.append(sortanddisplaytitle)
 
-    file_sortanddisplaytitles.close()
+    file_titles.close()
 
     # Update sorting and display titles for special games:
     
-    for sortanddisplaytitle in sortanddisplaytitles:    
+    for title in titles:    
 
-        if (sortanddisplaytitle[0] == game[0]):
-            sortingtitle = sortanddisplaytitle[1]
-            if (sortanddisplaytitle[2] == ''):
+        if (title[0] == game[0]):
+            sortingtitle = title[1]
+            if (title[2] == ''):
                 displaytitle = game[14] 
             else:
-                displaytitle = sortanddisplaytitle[2] + ' ' + game[14]
+                displaytitle = title[2] + ' ' + game[14]
                 
     # Remove "The" and "Vs." from sorting title:
            
@@ -160,9 +166,21 @@ def main():
     
     configsetup.init()
 
-    AMromlist = configsetup.AMconfigdir + "romlists/mame.txt"
+    global filename_hiscores  
+    global filename_benchmarks
+    global filename_bezels    
+    global filename_controls  
+    global filename_titles    
+
+    filename_hiscores   = configsetup.AMsupportdir + "AMhiscores.ini"
+    filename_benchmarks = configsetup.AMsupportdir + "AMbenchmarks.ini"
+    filename_bezels     = configsetup.AMsupportdir + "AMbezels.ini"
+    filename_controls   = configsetup.AMsupportdir + "AMcontrols.ini"
+    filename_titles     = configsetup.AMsupportdir + "AMtitles.txt"
 
     # Check if romlist exists:
+
+    AMromlist = configsetup.AMconfigdir + "romlists/mame.txt"
 
     romlistexists = False
     if os.path.isfile(AMromlist):
@@ -191,31 +209,51 @@ def main():
 
     games, header = configsetup.create_list_of_games_from_romlist()
 
+    if (len(games) == 0):
+        print("AM romlist is empty - EXIT")
+        return 3
+
+    # Check if files exist:
+
+    files_available = [0, 0, 0, 0, 0]
+        
+    if os.path.isfile(filename_hiscores):
+        files_available[0] = 1
+    else:
+        print("--- {} does not exist".format(filename_hiscores))
+        
+    if os.path.isfile(filename_benchmarks):
+        files_available[1] = 1
+    else:
+        print("--- {} does not exist".format(filename_benchmarks))
+
+    if os.path.isfile(filename_bezels):
+        files_available[2] = 1
+    else:
+        print("--- {} does not exist".format(filename_bezels))
+
+    if os.path.isfile(filename_controls):
+        files_available[3] = 1
+    else:
+        print("--- {} does not exist".format(filename_controls))
+    
+    if os.path.isfile(filename_titles):
+        files_available[4] = 1
+    else:
+        print("--- {} does not exist".format(filename_titles))
+    
     # Update fields in list of games:
-
-    bezeldimensionsfile_exists = False
-    if os.path.isfile(filename_bezeldimensions):
-        bezeldimensionsfile_exists = True
-    else:
-        print("--- bezeldimensions.txt does not exist in this directory, skipping update of Extra field")
-
-    sortanddisplaytitlesfile_exists = False
-    if os.path.isfile(filename_sortanddisplaytitles):
-        sortanddisplaytitlesfile_exists = True
-    else:
-        print("--- sortanddisplaytitles.txt does not exist in this directory, skipping update of Buttons and AltTitle fields")
-
+    
     for game in games:
 
         # Update 'AltTitle' field in romlist:
         update_AltTitle_field(game)
 
         # Update 'Extra' field in romlist:
-        if (bezeldimensionsfile_exists):
-            update_Extra_field(game)
+        update_Extra_field(game, files_available[0:4])
                     
         # Update 'Buttons' and 'AltTitle' fields in romlist:
-        if (sortanddisplaytitlesfile_exists):
+        if (files_available[4]):
             update_Buttons_and_AltTitle_fields(game)
 
         # Update romlist for specific games:
