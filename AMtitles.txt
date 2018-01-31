@@ -1,0 +1,281 @@
+#romname;sortingtitle;seriestitle(optional)
+
+mk;Mortal Kombat 1;
+mk2;Mortal Kombat 2;
+mk3;Mortal Kombat 3a;
+umk3;Mortal Kombat 3b;
+mk4;Mortal Kombat 4;
+
+starwars;Star Wars 1;Star Wars Series:
+esb;Star Wars 2;Star Wars Series:
+jedi;Star Wars 3;Star Wars Series:
+
+1945kiii;1945A;
+s1945;1945B;
+s1945p;1945C;
+s1945ii;1945D;
+s1945iii;1945E;
+
+openice;NHL;
+
+aliens;Alien2;
+alien3;Alien3;
+avsp;Alien4;
+
+arkanoid;Arkanoid1;
+arknoid2;Arkanoid2;
+arkatour;Arkanoid3;
+arkretrn;Arkanoid4;
+
+bsktball;Atari Basketball;
+
+bombjack;Bombjack1;
+bjtwin;Bombjack2;
+
+sbrkout;Breakout2;
+
+firetrap;Crazy Climber 3;
+
+stargate;Defender2;
+
+donpachi;Donpachi1;
+ddonpach;Donpachi2;
+
+dkong;Donkey Kong 1a;
+dkongj;Donkey Kong 1b;
+dkongpe;Donkey Kong 1c;
+dkongx;Donkey Kong 2a;
+ckongpt2;Donkey Kong 2b;
+dkongjr;Donkey Kong 3a;
+dkongjrj;Donkey Kong 3b;
+dkong3;Donkey Kong 4a;
+dkong3j;Donkey Kong 4b;
+
+ddragon;Double Dragon 1;
+ddragon2;Double Dragon 2;
+ddragon3;Double Dragon 3;
+doubledr;Double Dragon 4;
+
+eswat;ESWAT1;
+mt_eswat;ESWAT2;
+
+f1gpstar;Grand Prix Star 1;
+f1gpstr2;Grand Prix Star 2;
+
+f1en;F1 Exhaust Note;
+
+ghouls;Ghosts'n Goblins 2;
+
+goldnaxe;Golden Axe 1;
+ga2;Golden Axe 2;
+gaxeduel;Golden Axe 3;
+
+gt3d;Golden Tee 1;
+gt2k;Golden Tee 2;
+gtfore01;Golden Tee 3;
+gtfore06;Golden Tee 6;
+
+gunforce;Gunforce1;
+gunforc2;Gunforce2;
+
+hangon;Hang On 1;
+hangonjr;Hang On 2;
+shangon;Hang On 3;
+
+ikari;Ikari1;
+ikari3;Ikari2;
+
+chainrec;Magical Drop 0;
+magdrop;Magical Drop 1;
+magdrop2;Magical Drop 2;
+magdrop3;Magical Drop 3;
+
+mario;Mario1;
+suprmrio;Mario2;
+skatekds;Mario3;
+pc_smb;Mario4;
+pc_smb2;Mario5;
+pc_smb3;Mario6;
+
+megaman;Mega Man 1;
+
+mslugx;Metal Slug 2X;
+
+mooncrst;Moon Cresta 1;
+eagle;Moon Cresta 2;
+terracre;Moon Cresta 3;
+
+mrdo;MrDo1;
+docastle;MrDo2;
+dowild;MrDo3;
+dorunrun;MrDo4;
+
+nbajam;NBA1;
+nbajamte2;NBA2;
+nbajamte;NBA3;
+nbajamex;NBA4;
+nbahangt;NBA5;
+nbamht;NBA6;
+
+nitedrvr;Night Driver 1;
+280zzzap;Night Driver 2;
+
+offroad;Offroad1;
+offroadt;Offroad2;
+
+opwolf;Operation Wolf1;
+othunder;Operation Wolf2;
+opwolf3;Operation Wolf3;
+
+toutrun;Out Run 2;
+
+parodius;Parodius1;
+sexyparo;Parodius2;
+
+prehisle;Prehistoric Isle 1;
+preisle2;Prehistoric Isle 2;
+
+rtype;R-Type 1;
+rtype2;R-Type 2;
+rtypeleo;R-Type 3;
+
+rbisland;Rainbow Islands 1;
+rbislande;Rainbow Islands 2;
+
+slammast;Slam Masters 1;
+ringdest;Slam Masters 2;
+
+invaders;Space Invaders 1;
+invaddlx;Space Invaders 2;
+invadpt2;Space Invaders 3;
+invad2ct;Space Invaders 4;
+invrvnge;Space Invaders 5;
+spcinv95;Space Invaders 6;
+
+sf;Street Fighter 1;
+hsf2;Street Fighter 2;
+sfa2;Street Fighter 3;
+sfa3;Street Fighter 4;
+sfiii;Street Fighter 5;
+
+tron;Tron1;
+dotron;Tron2;
+
+wboy;Wonder Boy 1;
+wbml;Wonder Boy 2;
+wb3;Wonder Boy3;
+
+xmen;X-Men1;
+xmen6p;X-Men2;
+
+zaxxon;Zaxxon 1;
+szaxxon;Zaxxon 2;
+
+bstars;Baseball Stars 1;
+
+darius;Darius1;
+darius2;Darius2;
+dariusg;Darius3;
+gdarius2;Darius4;
+
+pang;Pang1;
+mstworld;Pang2;
+pang3;Pang3;
+
+gatedoom;Gate of Doom 1;
+wizdfire;Gate of Doom 2;
+
+ddtod;Dungeons and Dragons 1;
+ddsom;Dungeons and Dragons 2;
+
+rushatck;Green Beret 2;
+
+ghostb3;Ghostbusters 1;
+meikyuh;Ghostbusters 2;
+
+souledge;Soul Edge 1;
+soulclbr;Soul Edge 2;
+
+dblplay;Double Play;
+
+goonies;Goonies;
+
+lwingsj;Legendary Wings 1;
+lwings;Legendary Wings 2;
+
+warner;Wardner1;
+pyros;Wardner2;
+
+raiden;Raiden 1;
+raiden2;Raiden 2;
+
+qbert;Q*bert1;
+sqbert;Q*bert2;
+qbertqub;Q*bert3;
+
+robby;Robby Roto;
+
+mt_sonic;Sonic1;
+mt_soni2;Sonic2;
+mp_sonic;Sonic3;
+mp_soni2;Sonic4;
+sonic;Sonic5;
+
+pnchout;PunchOut1;
+spnchout;PunchOut2;
+
+indyheat;Indy Heat;
+
+bonkadv;Bonk's Adventure;
+
+drgnunit;Castle of Dragon;
+
+darkmist;Darkmist;
+
+asteroid;Asteroids1;Asteroid Series:
+astdelux;Asteroids2;Asteroid Series:
+blstroid;Asteroids3;Asteroid Series:
+
+galaxian;Galaxian1;Galaxy Series:
+galaga;Galaxian2;Galaxy Series:
+gaplus;Galaxian3;Galaxy Series:
+
+xmcota;Marvel1;Marvel Fighting Series:
+msh;Marvel2;Marvel Fighting Series:
+xmvsf;Marvel3;Marvel Fighting Series:
+mshvsf;Marvel4;Marvel Fighting Series:
+mvsc;Marvel5;Marvel Fighting Series:
+mvsc2;Marvel6;Marvel Fighting Series:
+
+centiped;Centipede1;Myriapod Series:
+milliped;Centipede2;Myriapod Series:
+
+puckman;Pacman1a;Pac-Man Series:
+pacman;Pacman1b;Pac-Man Series:
+mspacman;Pacman2;Pac-Man Series:
+pacplus;Pacman3;Pac-Man Series:
+superpac;Pacman4;Pac-Man Series:
+babypac;Pacman5;Pac-Man Series:
+jrpacman;Pacman6;Pac-Man Series:
+pacnpal;Pacman7a;Pac-Man Series:
+pacnchmp;Pacman7b;Pac-Man Series:
+profpac;Pacman8;Pac-Man Series:
+pacland;Pacman9a;Pac-Man Series:
+pacmania;Pacman9b;Pac-Man Series:
+
+rayforce;Ray Force 1;Ray Series:
+raystorm;Ray Force 2;Ray Series:
+raycris;Ray Force 3;Ray Series:
+
+sprint1;Sprint 1;Sprint Series:
+sprint2;Sprint 2;Sprint Series:
+sprint4;Sprint 3;Sprint Series:
+sprint8;Sprint 4;Sprint Series:
+sprint8a;Sprint 5;Sprint Series:
+ssprint;Sprint 6;Sprint Series:
+csprint;Sprint 7;Sprint Series:
+badlands;Sprint 8;Sprint Series:
+
+trackfld;Track and Field1;Track & Field Series:
+hyperspt;Track and Field2;Track & Field Series:
+88games;Track and Field3;Track & Field Series:
