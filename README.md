@@ -18,21 +18,22 @@ This repository contains a collection of programs that provides [MAME](http://ww
 
 Python program to process hiscores of a single game or a list of games. For each game:
 
-- Convert binary hiscores to ASCII using the [***hi2txt***](http://greatstone.free.fr/hi2txt/) Java archive
-- Save hiscores in a formatted ASCII file: *AMhiscores.ini* 
-- This allows hiscores to be displayed in Attract-Mode
+- Binary hiscore data is readout and converted into ASCII code using the [***hi2txt***](http://greatstone.free.fr/hi2txt/) Java archive.
+- The hi2txt output is saved in a dedicated MAME hiscores directory.
+- The top hiscore is reformatted and saved in a formatted ASCII file (**AMhiscores.ini**).
+- This allows hiscores to be displayed in Attract-Mode.
 
 Requirements:
 
-- *hi2txt.jar* and *hi2txt.zip*: [http://greatstone.free.fr/hi2txt](http://greatstone.free.fr/hi2txt/)
+- **hi2txt.jar** and **hi2txt.zip**: [http://greatstone.free.fr/hi2txt](http://greatstone.free.fr/hi2txt/)
 - Java: [https://www.java.com](https://www.java.com)
-- *hiscore.dat*: [http://highscore.mameworld.info/](http://highscore.mameworld.info/)
+- **hiscore.dat**: [http://highscore.mameworld.info/](http://highscore.mameworld.info/)
 
 <a name="benchgen" />
 
 ### MAME benchmark generator: [*benchmarkgenerator.py*](benchmarkgenerator.py)
 
-Python program to generate MAME benchmark files of a single game or a list of games. Benchmarks are saved in a dedicated MAME *benchmarks* directory.
+Python program to generate MAME benchmark files of a single game or a list of games. Benchmarks are saved in a dedicated MAME benchmarks directory.
 
 <a name="benchana" />
 
@@ -40,11 +41,11 @@ Python program to generate MAME benchmark files of a single game or a list of ga
 
 Python program to analyze MAME benchmark files of a single game or a list of games. For each game:
 
-- Average emulation speed and total emulation time is calculated by taking into account the benchmark from the last game and
+- Average emulation speed and total emulation time are calculated by taking into account the benchmark from the last game and
   the previous benchmark.
-- The previous benchmark is updated and saved in a dedicated MAME *benchmarks* directory.
-- Convert average emulation speed in to a 1-5 star rating. 
-- Save benchmark data in a formatted ASCII file: *AMbenchmarks.ini*
+- The previous benchmark is updated and saved in a dedicated MAME benchmarks directory.
+- The average emulation speed is converted into a 1-5 star rating. 
+- Benchmark data are saved in a formatted ASCII file (**AMbenchmarks.ini**).
 - This allows benchmark data to be displayed in Attract-Mode.  
 
 <a name="bezel" />
@@ -53,15 +54,15 @@ Python program to analyze MAME benchmark files of a single game or a list of gam
 
 Python program to analyze MAME bezel artwork:
 
-- Analysis is based on the standard .lay file structure as defined [here](http://wiki.mamedev.org/index.php/LAY_File_Basics_-_Part_I)
-- A lower resolution version of each bezel is saved in a dedicated *AMbezels* directory
-- Bezel data is reformatted and saved in a formatted ASCII file: *AMbezels.ini*
+- Analysis is based on the standard .lay file structure as defined [here](http://wiki.mamedev.org/index.php/LAY_File_Basics_-_Part_I).
+- A lower resolution version of each bezel is saved in a dedicated Attract-Mode bezels directory.
+- Bezel data is reformatted and saved in a formatted ASCII file (**AMbezels.ini**).
 - This allows bezel artwork to be displayed in Attract-Mode.
 
 Requirements:
 
 - Bezel artwork, e.g. [http://www.progettosnaps.net/artworks/](http://www.progettosnaps.net/artworks/)
-- Each bezel artwork .zip file should be unzipped in a corresponding directory (use [*unziplist.bash*](unziplist.bash))
+- Each bezel artwork .zip file should be unzipped in a corresponding directory (use [*unziplist.bash*](unziplist.bash)).
 - Sips: An command-line image processing tool that is standard installed on Mac OS X. For Linux and Windows users, a great free alternative is [ImageMagick](https://www.imagemagick.org) - just install and change the code accordingly.
 
 <a name="control" />
@@ -70,12 +71,12 @@ Requirements:
 
 Python program to analyze game controls:
 
-- Control data is reformatted and saved in a formatted ASCII file: *AMcontrols.ini*
+- Control data is reformatted and saved in a formatted ASCII file (**AMcontrols.ini**).
 - This allows game controls to be displayed in Attract-Mode.
 
 Requirements:
 
-- *controls.ini*, e.g. [http://ledblinky.net/downloads/controls.ini.0.141.1.zip](http://ledblinky.net/downloads/controls.ini.0.141.1.zip)
+- **controls.ini**, e.g. [http://ledblinky.net/downloads/controls.ini.0.141.1.zip](http://ledblinky.net/downloads/controls.ini.0.141.1.zip)
 
 <a name="title" />
 
@@ -83,10 +84,9 @@ Requirements:
 
 Python program to update Attract-Mode MAME romlist with additional game data:
 
-- Replace *AltTitle* field with display title
-- Replace *Buttons* field with sortable title
-- Replace *Extra* field with formatted tag to indicate whether there is hiscore, benchmark, bezel and/or controls data available
-- The latter allows hiscore, benchmark, bezel and controls data availability to be used in Attract-Mode filters.
+- The *AltTitle* field is replaced by a display title.
+- The *Buttons* field is replaced by a sortable title.
+- The *Extra* field is replaced by a formatted tag to indicate whether hiscore, benchmark, bezel and/or controls data are available. This can be used to contruct Attract-Mode filters.
 
 <a name="start" />
 
@@ -108,8 +108,8 @@ New Attract-Mode layout which uses the above functionality:
 
 Requirements:
 
-- *AMhiscores.ini* as generated by [*hiscoreanalysis.py*](hiscoreanalysis.py)
-- *AMbenchmarks.ini* as generated by [*benchmarkanalysis.py*](benchmarkanalysis.py)
-- *AMbezels.ini* as generated by [*bezelanalysis.py*](bezelanalysis.py)
-- *AMcontrols.ini* as generated by [*controlanalysis.py*](controlanalysis.py)
-- updated romlist as generated by [*updateromlist.py*](updateromlist.py)
+- **AMhiscores.ini** generated by [*hiscoreanalysis.py*](hiscoreanalysis.py)
+- **AMbenchmarks.ini** generated by [*benchmarkanalysis.py*](benchmarkanalysis.py)
+- **AMbezels.ini** generated by [*bezelanalysis.py*](bezelanalysis.py)
+- **AMcontrols.ini** generated by [*controlanalysis.py*](controlanalysis.py)
+- An updated romlist generated by [*updateromlist.py*](updateromlist.py)
