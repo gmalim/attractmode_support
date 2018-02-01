@@ -2,9 +2,9 @@
 
 This repository contains a collection of programs that provides [MAME](http://www.mamedev.org/) support for the [Attract-Mode](http://www.attractmode.org/) frontend:
 
-- [MAME hiscore support for Attract-Mode](#hiscore)
 - [MAME emulation benchmark generator](#benchgen)
 - [MAME emulation benchmark support for Attract-Mode](#benchana)
+- [MAME hiscore support for Attract-Mode](#hiscore)
 - [MAME bezel artwork support for Attract-Mode](#bezel)
 - [MAME game controls support for Attract-Mode](#control)
 - [MAME title display and sorting support for Attract-Mode](#title)
@@ -12,22 +12,6 @@ This repository contains a collection of programs that provides [MAME](http://ww
 - [Attract-Mode layout with abovementioned MAME support (WIP)](#layout)
 
 ---
-<a name="hiscore" />
-
-### MAME hiscore support for Attract-Mode: [*hiscoreanalysis.py*](hiscoreanalysis.py)
-
-Python program to analyze hiscores of a single game or a list of games:
-
-- Binary hiscore data is readout and converted into ASCII code using the [hi2txt](http://greatstone.free.fr/hi2txt/) Java archive.
-- The hi2txt output is saved in a dedicated MAME hiscores directory.
-- The top hiscore of each game is reformatted and saved in a formatted ASCII file (**data/AMhiscores.ini**). This file can be used to display the top hiscores in Attract-Mode.
-
-Requirements:
-
-- Latest [hiscore.dat](http://highscore.mameworld.info/), and follow instructions to enable hiscore saving in MAME.
-- Latest [hi2txt.jar and hi2txt.zip](http://greatstone.free.fr/hi2txt/).
-- [Java](https://www.java.com) (to run hi2txt.jar)
-
 <a name="benchgen" />
 
 ### MAME emulation benchmark generator: [*benchmarkgenerator.py*](benchmarkgenerator.py)
@@ -45,6 +29,22 @@ Python program to analyze MAME emulation benchmark files of a single game or a l
 - The previous benchmark is updated and saved in a dedicated MAME benchmarks directory.
 - The average emulation speed is converted into a 1-5 star rating. 
 - Benchmark data are saved in a formatted ASCII file (**data/AMbenchmarks.ini**). This file can be used to display benchmark data in Attract-Mode.
+
+<a name="hiscore" />
+
+### MAME hiscore support for Attract-Mode: [*hiscoreanalysis.py*](hiscoreanalysis.py)
+
+Python program to analyze hiscores of a single game or a list of games:
+
+- Binary hiscore data is readout and converted into ASCII code using the [hi2txt](http://greatstone.free.fr/hi2txt/) Java archive.
+- The hi2txt output is saved in a dedicated MAME hiscores directory.
+- The top hiscore of each game is reformatted and saved in a formatted ASCII file (**data/AMhiscores.ini**). This file can be used to display the top hiscores in Attract-Mode.
+
+Requirements:
+
+- Latest [hiscore.dat](http://highscore.mameworld.info/), and follow instructions to enable hiscore saving in MAME.
+- Latest [hi2txt.jar and hi2txt.zip](http://greatstone.free.fr/hi2txt/).
+- [Java](https://www.java.com) (to run hi2txt.jar)
 
 <a name="bezel" />
 
@@ -75,7 +75,7 @@ Python program to reformat and save game controls data in a formatted ASCII file
 
 Requirements:
 
-- Latest [controls.ini](data/controls.ini) file: no longer developed (?), latest version (v0.141.1) is provided (taken from [here](http://ledblinky.net/downloads/controls.ini.0.141.1.zip)).
+- Latest [controls.ini](data/controls.ini) file: no longer developed (?), latest version is provided (v0.141.1 taken from [here](http://ledblinky.net/downloads/controls.ini.0.141.1.zip)).
 
 <a name="title" />
 
