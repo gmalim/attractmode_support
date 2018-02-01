@@ -6,22 +6,21 @@ This repository contains a collection of programs that provides [MAME](http://ww
 - [MAME benchmark generator](#benchgen)
 - [MAME benchmark support for Attract-Mode](#benchana)
 - [MAME bezel artwork support for Attract-Mode](#bezel)
-- [MAME controls support for Attract-Mode](#control)
+- [MAME controls support for Attract-Mode (WIP)](#control)
 - [MAME title display and sorting support for Attract-Mode](#title)
 - [MAME startup scripts](#start)
-- [New Attract-Mode layout with abovementioned MAME support](#layout)
+- [New Attract-Mode layout with abovementioned MAME support (WIP)](#layout)
 
 ---
 <a name="hiscore" />
 
 ### MAME hiscore support for Attract-Mode: [*hiscoreanalysis.py*](hiscoreanalysis.py)
 
-Python program to process hiscores of a single game or a list of games. For each game:
+Python program to analyze hiscores of a single game or a list of games:
 
 - Binary hiscore data is readout and converted into ASCII code using the [**hi2txt**](http://greatstone.free.fr/hi2txt/) Java archive.
 - The hi2txt output is saved in a dedicated MAME hiscores directory.
-- The top hiscore is reformatted and saved in a formatted ASCII file (**AMhiscores.ini**).
-- This allows hiscores to be displayed in Attract-Mode.
+- The top hiscore of each game is reformatted and saved in a formatted ASCII file (**AMhiscores.ini**). This file can be used to display the hiscores in Attract-Mode.
 
 Requirements:
 
@@ -39,14 +38,13 @@ Python program to generate MAME benchmark files of a single game or a list of ga
 
 ### MAME benchmark support for Attract-Mode: [*benchmarkanalysis.py*](benchmarkanalysis.py)
 
-Python program to analyze MAME benchmark files of a single game or a list of games. For each game:
+Python program to analyze MAME benchmark files of a single game or a list of games:
 
 - Average emulation speed and total emulation time are calculated by taking into account the benchmark from the last game and
   the previous benchmark.
 - The previous benchmark is updated and saved in a dedicated MAME benchmarks directory.
 - The average emulation speed is converted into a 1-5 star rating. 
-- Benchmark data are saved in a formatted ASCII file (**AMbenchmarks.ini**).
-- This allows benchmark data to be displayed in Attract-Mode.  
+- Benchmark data are saved in a formatted ASCII file (**AMbenchmarks.ini**). This file can be used to display the hiscores in Attract-Mode.
 
 <a name="bezel" />
 
@@ -57,8 +55,7 @@ Python program to analyze MAME bezel artwork:
 - Analysis is based on the standard .lay file structure as defined [here](http://wiki.mamedev.org/index.php/LAY_File_Basics_-_Part_I).
 - User chooses whether to create a low resolution version of each bezel (since bezel files usually are high resolution and therefore can be slow to render in Attract-Mode), or create symbolic links to the original bezel files.
 - Low-resolution bezels / symlinks are saved in a dedicated Attract-Mode bezels directory.
-- Bezel data is reformatted and saved in a formatted ASCII file (**AMbezels.ini**).
-- This allows bezel artwork to be displayed in Attract-Mode.
+- Bezel data is reformatted and saved in a formatted ASCII file (**AMbezels.ini**). This file can be used to display the hiscores in Attract-Mode.
 
 Requirements:
 
@@ -72,12 +69,9 @@ Options:
 
 <a name="control" />
 
-### MAME controls support for Attract-Mode: [*controlanalysis.py*](controlanalysis.py)
+### MAME controls support for Attract-Mode (WIP): [*controlanalysis.py*](controlanalysis.py)
 
-Python program to analyze game controls:
-
-- Control data is reformatted and saved in a formatted ASCII file (**AMcontrols.ini**).
-- This allows game controls to be displayed in Attract-Mode.
+Python program to reformat and save game controls data in a formatted ASCII file (**AMcontrols.ini**). This file can be used to display the hiscores in Attract-Mode.
 
 Requirements:
 
@@ -89,13 +83,13 @@ Requirements:
 
 Python program to update the Attract-Mode MAME romlist with additional game data:
 
-- The *AltTitle* field is replaced by a display title.
-- The *Buttons* field is replaced by a sortable title.
+- The *AltTitle* field is replaced by a new title that can be used to display games in Attract-Mode.
+- The *Buttons* field is replaced by a tag that can be used to sort games in Attract-Mode.
 - The *Extra* field is replaced by a formatted tag to indicate whether hiscore, benchmark, bezel and/or controls data are available or not. This can be used to contruct Attract-Mode filters.
 
 Options:
 
-- **AMtitles.txt**: An example file is provided. Update AMtitles.txt in a text editor if you want to change the order of specific games in Attract-Mode (e.g. if you prefer *umk3* to appear between *mk3* and *mk4*). You can also tag games that are part of a series (e.g. *starwars*, *esb* and *jedi* as part of the same 'Star Wars' series).
+- **AMtitles.txt**: An example file is provided. Update AMtitles.txt in a text editor if you want to change the order of specific games in Attract-Mode (e.g. if you prefer *umk3* to appear between *mk3* and *mk4*). You can also explicitly add a display title tag to games that are part of a series (e.g. *starwars*, *esb* and *jedi* as part of the same 'Star Wars' series).
 - **AMhiscores.ini** generated by [*hiscoreanalysis.py*](hiscoreanalysis.py)
 - **AMbenchmarks.ini** generated by [*benchmarkanalysis.py*](benchmarkanalysis.py)
 - **AMbezels.ini** generated by [*bezelanalysis.py*](bezelanalysis.py)
@@ -110,7 +104,7 @@ Startup scripts to automate the execution of [*hiscoreanalysis.py*](hiscoreanaly
 
 <a name="layout" />
 
-### New Attract-Mode layout with abovementioned MAME support: [*mylayout*](mylayout)
+### New Attract-Mode layout with abovementioned MAME support (WIP): [*mylayout*](mylayout)
 
 New Attract-Mode layout featuring:
 
