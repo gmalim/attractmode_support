@@ -20,7 +20,7 @@ Python program to analyze hiscores of a single game or a list of games:
 
 - Binary hiscore data is readout and converted into ASCII code using the [hi2txt](http://greatstone.free.fr/hi2txt/) Java archive.
 - The hi2txt output is saved in a dedicated MAME hiscores directory.
-- The top hiscore of each game is reformatted and saved in a formatted ASCII file (**AMhiscores.ini**). This file can be used to display the top hiscores in Attract-Mode.
+- The top hiscore of each game is reformatted and saved in a formatted ASCII file (**data/AMhiscores.ini**). This file can be used to display the top hiscores in Attract-Mode.
 
 Requirements:
 
@@ -44,7 +44,7 @@ Python program to analyze MAME emulation benchmark files of a single game or a l
   the previous benchmark.
 - The previous benchmark is updated and saved in a dedicated MAME benchmarks directory.
 - The average emulation speed is converted into a 1-5 star rating. 
-- Benchmark data are saved in a formatted ASCII file (**AMbenchmarks.ini**). This file can be used to display benchmark data in Attract-Mode.
+- Benchmark data are saved in a formatted ASCII file (**data/AMbenchmarks.ini**). This file can be used to display benchmark data in Attract-Mode.
 
 <a name="bezel" />
 
@@ -55,28 +55,27 @@ Python program to analyze MAME bezel artwork:
 - Analysis is based on the standard .lay file structure as defined [here](http://wiki.mamedev.org/index.php/LAY_File_Basics_-_Part_I).
 - User chooses whether to create a low resolution version of each bezel (since bezel files usually are high resolution and therefore can be slow to render in Attract-Mode), or create symbolic links to the original bezel files.
 - Low-resolution bezels / symlinks are saved in a dedicated Attract-Mode bezels directory.
-- Bezel data are reformatted and saved in a formatted ASCII file (**AMbezels.ini**). This file can be used to display bezels in Attract-Mode.
+- Bezel data are reformatted and saved in a formatted ASCII file (**data/AMbezels.ini**). This file can be used to display bezels in Attract-Mode.
 
 Requirements:
 
-- [configsetup.py](configsetup.py)
 - Bezel artwork, e.g. [http://www.progettosnaps.net/artworks/](http://www.progettosnaps.net/artworks/)
 - Each bezel artwork .zip file should be unzipped in its own corresponding directory (use [unziplist.bash](unziplist.bash)).
 - Sips (to create low resolution versions of bezels): An command-line image processing tool that is standard installed on Mac OS X. If Sips is not installed, symbolic links to the original bezel files will be created instead. For Linux and Windows users, a great free alternative to Sips is [ImageMagick](https://www.imagemagick.org) - just install and change the code accordingly.
 
 Options:
 
-- [bezelexceptions.txt](bezelexceptions.txt): An example file is provided. Unfortunately for some bezels the analysis can give wrong results in Attract-Mode (e.g because the .lay file contains additional xml tags or has a non-standard structure). Games for which the analysis fails should be added to bezelexceptions.txt, the corresponding bezel file in the AM bezels directory should be deleted and bezelanalysis.py should be run again to generate a new AMbezels.ini.
+- [bezelexceptions.txt](data/bezelexceptions.txt): An example file is provided. Unfortunately for some bezels the analysis can give wrong results in Attract-Mode (e.g because the .lay file contains additional xml tags or has a non-standard structure). Games for which the analysis fails should be added to bezelexceptions.txt, the corresponding bezel file in the AM bezels directory should be deleted and bezelanalysis.py should be run again to generate a new AMbezels.ini.
 
 <a name="control" />
 
 ### MAME game controls support for Attract-Mode: [*reformatcontrols.py*](reformatcontrols.py)
 
-Python program to reformat and save game controls data in a formatted ASCII file (**AMcontrols.ini**). This file can be used to display game controls data in Attract-Mode.
+Python program to reformat and save game controls data in a formatted ASCII file (**data/AMcontrols.ini**). This file can be used to display game controls data in Attract-Mode.
 
 Requirements:
 
-- Latest **controls.ini** file (no longer developed (?), currently v0.141.1, e.g. [here](http://ledblinky.net/downloads/controls.ini.0.141.1.zip))
+- Latest [controls.ini](data/controls.ini) file: no longer developed (?), latest version (v0.141.1) is provided in this repository (or see e.g. [here](http://ledblinky.net/downloads/controls.ini.0.141.1.zip)).
 
 <a name="title" />
 
@@ -90,7 +89,7 @@ Python program to update the Attract-Mode MAME romlist with additional game data
 
 Options:
 
-- [AMtitles.txt](AMtitles.txt): An example file is provided. Update AMtitles.txt in a text editor if you want to change the order of specific games in Attract-Mode (e.g. if you prefer *umk3* to appear between *mk3* and *mk4*). You can also explicitly add a display title tag to games that are part of a series (e.g. *starwars*, *esb* and *jedi* as part of the same 'Star Wars' series).
+- [AMtitles.txt](data/AMtitles.txt): An example file is provided. Update this file in a text editor if you want to change the order of specific games in Attract-Mode (e.g. if you prefer *umk3* to appear between *mk3* and *mk4*). You can also explicitly add a display title tag to games that are part of a series (e.g. *starwars*, *esb* and *jedi* as part of the same 'Star Wars' series).
 - **AMhiscores.ini** generated by [hiscoreanalysis.py](hiscoreanalysis.py)
 - **AMbenchmarks.ini** generated by [benchmarkanalysis.py](benchmarkanalysis.py)
 - **AMbezels.ini** generated by [bezelanalysis.py](bezelanalysis.py)
