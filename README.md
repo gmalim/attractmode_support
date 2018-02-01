@@ -9,7 +9,7 @@ This repository contains a collection of programs that provides [MAME](http://ww
 - [MAME game controls support for Attract-Mode](#control)
 - [MAME title display and sorting support for Attract-Mode](#title)
 - [MAME startup scripts](#start)
-- [New Attract-Mode layout with abovementioned MAME support (WIP)](#layout)
+- [Attract-Mode layout with abovementioned MAME support (WIP)](#layout)
 
 ---
 <a name="hiscore" />
@@ -75,7 +75,7 @@ Python program to reformat and save game controls data in a formatted ASCII file
 
 Requirements:
 
-- Latest [controls.ini](data/controls.ini) file: no longer developed (?), latest version (v0.141.1) is provided in this repository (or see e.g. [here](http://ledblinky.net/downloads/controls.ini.0.141.1.zip)).
+- Latest [controls.ini](data/controls.ini) file: no longer developed (?), latest version (v0.141.1) is provided (taken from [here](http://ledblinky.net/downloads/controls.ini.0.141.1.zip)).
 
 <a name="title" />
 
@@ -83,9 +83,9 @@ Requirements:
 
 Python program to update the Attract-Mode MAME romlist with additional game data:
 
-- The *AltTitle* field is replaced by a new title that can be used to display games in Attract-Mode.
+- The *AltTitle* field is replaced by a cleaned title (square and round parentheses as well as any leading "The" or "Vs." are removed) for display purposes in Attract-Mode.
 - The *Buttons* field is replaced by a tag that can be used to sort games in Attract-Mode.
-- The *Extra* field is replaced by a formatted tag to indicate whether hiscore, benchmark, bezel and/or game controls data are available or not. This can be used to contruct Attract-Mode filters.
+- The *Extra* field is replaced by a formatted tag to indicate whether hiscore, benchmark, bezel and/or game controls data are available or not. This can be used to contruct Attract-Mode filters based on these parameters.
 
 Options:
 
@@ -104,9 +104,9 @@ Startup scripts to automate the execution of [hiscoreanalysis.py](hiscoreanalysi
 
 <a name="layout" />
 
-### New Attract-Mode layout with abovementioned MAME support (WIP): [*mylayout*](mylayout)
+### Attract-Mode layout with abovementioned MAME support (WIP): [*mylayout*](mylayout)
 
-New Attract-Mode layout for arcade games emulated with MAME, featuring:
+Attract-Mode layout for arcade games emulated with MAME, featuring:
 
 - Current hiscore displayed for each game
 - Current emulation benchmark displayed for each game
