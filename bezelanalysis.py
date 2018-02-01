@@ -1,21 +1,10 @@
 #!/usr/bin/python -tt
 """
-======
-TO DO: 
-
-Search for bezel png file: 
-Check if more than one hit. 
-If more than one found, analyze which one should be used - right now the first found is used. 
-If no hits, just search for '(\w+.png)'. 
-If only one is found, that one has to be the bezel
-If more than one found, analyze which one should be used. If you do nothing the first one found is used?
-======
-
-Program to analyze unzipped MAME bezels:
-- Analysis is based on the .lay file structure as defined here: http://wiki.mamedev.org/index.php/LAY_File_Basics_-_Part_I
-- A lower resolution version of each bezel or a symbolic link to each bezel is saved in a dedicated AM bezels directory.
-- Bezel data is reformatted and saved in a formatted ASCII file: AMbezels.ini
-- This allows bezels to be displayed in Attract-Mode layouts by using the 'file-format' module.
+MAME support program to analyze MAME bezel artwork:
+- Analysis is based on the standard .lay file structure as defined here: http://wiki.mamedev.org/index.php/LAY_File_Basics_-_Part_I
+- User chooses whether to create a low resolution version of each bezel (since bezel files usually are high resolution and therefore can be slow to render in Attract-Mode), or create symbolic links to the original bezel files.
+- Low-resolution bezels / symlinks are saved in a dedicated Attract-Mode bezels directory.
+- Bezel data are reformatted and saved in a formatted ASCII file (AMbezels.ini). This file can be used to display bezels in Attract-Mode.
 
 Usage:
 
@@ -33,7 +22,7 @@ myAMbezeldir   = "${HOME}/Games/Arcade Art/bezel/AMbezels/"            # Directo
 5) In a terminal, type: ./bezelanalysis.py
 
 Author: Gordon Lim
-Last Edit: 31 Jan 2018 
+Last Edit: 1 Feb 2018 
 """
 
 import configsetup
@@ -74,7 +63,7 @@ def main():
         print("Next time please type 'y' or 'n'")
         return 1
 
-    if clearAMbezels:
+    if (clearAMbezels == 'y'):
         subprocess.call('rm *.png', cwd = AMbezeldir, shell = True)
         
     rescale = raw_input('Create low-resolution bezels? Press "y" or "n" followed by return/enter: ')
@@ -249,7 +238,7 @@ def main():
 
         # Create low-resolution version of bezel or symbolic link to bezel:
         
-        if (rescale):
+        if (rescale == "y"):
         
             # Copy .png file to ${AMbezeldir}, rename the file and change the resolution:
         
@@ -297,8 +286,8 @@ def main():
             
         else: # Create symlink to bezel file:
 
-            source      = MAMEbezelsdir + romname + "/" + bezelfilename
-            destination = AMbezelsdir + romname + '.png' 
+            source      = MAMEbezeldir + romname + "/" + bezelfilename
+            destination = AMbezeldir + romname + '.png' 
             
             try:
                 os.symlink(source, destination)
@@ -340,7 +329,7 @@ def main():
 
     # Save bezel data in AMbezels.ini:
 
-    AMbezelfilename = configsetup.AMsupportdir + "AMbezels.ini"
+    AMbezelfilename = configsetup.AMsupportdir + "data/AMbezels.ini"
         
     AMbezelfile = open(AMbezelfilename, 'w')
     for bezel in bezels:

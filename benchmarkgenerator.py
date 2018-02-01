@@ -1,8 +1,8 @@
 #!/usr/bin/python -tt
 """
-Program to generate MAME emulation benchmarks of a single game or a list of games. For each game:
+MAME support program to generate emulation benchmarks of a single game or a list of games:
 - User is asked to enter a benchmark timeperiod (default is 60 secs)
-- Benchmarks are generated and saved in a dedicated MAME benchmarks directory (${MAMEconfigdir}/benchmarks).
+- Benchmarks are generated and saved in a dedicated MAME benchmarks directory.
 
 Usage:
 
@@ -14,7 +14,7 @@ OR to process all games in your Attract-Mode MAME romlist, type:
    ./benchmarkgenerator.py all
 
 Author: Gordon Lim
-Last Edit: 30 Jan 2018 
+Last Edit: 1 Feb 2018 
 """
 
 import configsetup
@@ -56,6 +56,10 @@ def main():
     
     # Check input and process game(s):
     
+    if (len(sys.argv) != 2):
+        print("Please provide a romname or 'all' as input argument")
+        return 1
+
     inputargument = sys.argv[1]
 
     benchmarktimeperiod = raw_input('Enter benchmark running time in seconds (default: 60 secs) and press return/enter: ') or '60'

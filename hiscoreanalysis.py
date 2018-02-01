@@ -1,16 +1,15 @@
 #!/usr/bin/python -tt
 """
-Program to get hiscores from a single game or a list of games. For each game:
-- Hiscores are readout using the 'hi2txt' Java archive (see http://greatstone.free.fr/hi2txt/).
-- The hi2txt output is saved in a dedicated MAME hiscores directory (${MAMEconfigdir}/hiscores).
-- The top hiscore is reformatted and saved in a formatted ASCII file: AMhiscores.ini
-- This allows hiscores to be displayed in Attract-Mode layouts by using the 'file-format' module.
+MAME support program to analyze hiscores of a single game or a list of games:
+- Binary hiscore data is readout and converted into ASCII code using the hi2txt Java archive.
+- The hi2txt output is saved in a dedicated MAME hiscores directory.
+- The top hiscore of each game is reformatted and saved in a formatted ASCII file (AMhiscores.ini). This file can be used to display the top hiscores in Attract-Mode.
 
 Requirements:
 
-- hi2txt.jar and hi2txt.zip (see http://greatstone.free.fr/hi2txt/)
-- Java (see https://www.java.com)
-- hiscore.dat (see http://highscore.mameworld.info/)
+- The latest hi2txt.jar and hi2txt.zip (see http://greatstone.free.fr/hi2txt/)
+- The latest hiscore.dat (see http://highscore.mameworld.info/)
+- Java (to run hi2txt.jar, see https://www.java.com)
 
 Usage:
 
@@ -25,7 +24,7 @@ OR to process all games in your Attract-Mode MAME romlist, type:
    ./hiscoreanalysis.py all
 
 Author: Gordon Lim
-Last Edit: 30 Jan 2018 
+Last Edit: 1 Feb 2018 
 """
 
 import configsetup
@@ -61,7 +60,7 @@ def createhiscorefile(game):
 
     # Run Java on hi2txt.jar and save output in MAME hiscores directory:
 
-    MAMEhiscorefilename = MAMEhiscoredir + game + ".ini"
+    MAMEhiscorefilename = MAMEhiscoredir + game + ".txt"
     MAMEhiscorefile = open(MAMEhiscorefilename, 'w')
     
     command = ["java", "-jar", hi2txtdir + "hi2txt.jar", "-r", MAMEbinaryhiscorefile, "-hiscoredat", hiscoredat,
@@ -103,7 +102,7 @@ def createhiscorefile(game):
 
     # Save top hiscore in AMhiscores.ini:
 
-    AMhiscorefilename = configsetup.AMsupportdir + "AMhiscores.ini"
+    AMhiscorefilename = configsetup.AMsupportdir + "data/AMhiscores.ini"
 
     AMhiscorefilename_exists = False
     if os.path.isfile(AMhiscorefilename):
@@ -169,7 +168,20 @@ def main():
             return 1
     
     # Check input and process game(s):
-    
+
+    clearasciihiscores = raw_input('Remove all ASCII hiscore files? (this will NOT delete binary hiscore data created by MAME in the nvram and hi directories) Press "y" or "n" followed by return/enter: ')
+
+    if not ((clearasciihiscores == 'y') or (clearasciihiscores == 'n')):
+        print("Next time please type 'y' or 'n'")
+        return 1
+
+    if (clearasciihiscores == 'y'):
+        subprocess.call('rm *.txt', cwd = MAMEhiscoredir, shell = True)
+
+    if (len(sys.argv) != 2):
+        print("Please provide a romname or 'all' as input argument")
+        return 1
+       
     inputargument = sys.argv[1]
 
     if (inputargument == 'all'):

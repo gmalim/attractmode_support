@@ -1,6 +1,6 @@
 #!/usr/bin/python -tt
 """
-Program to setup attractmode_support configuration.
+Program setup attractmode_support configuration.
 
 Change the following directories according to your system setup:
 """
@@ -10,6 +10,11 @@ myMAMEconfigdir = "${HOME}/.mame/"                           # Directory contain
 myAMconfigdir   = "${HOME}/.attract/"                        # Directory containing your Attract-Mode configuration files
 myMAMEexecdir   = "${HOME}/Games/SDLMAME v0.193 64-bit/"     # Directory containing your MAME executable
 myAMexecdir     = "${HOME}/Games/attract/"                   # Directory containing your Attract-Mode executable
+
+"""
+Author: Gordon Lim
+Last Edit: 1 Feb 2018 
+"""
 
 import os
 

@@ -1,11 +1,10 @@
 #!/usr/bin/python -tt
 """
-Program to analyze MAME benchmark files of a single game or a list of games. For each game:
-- Average emulation speed and total emulation time is calculated by taking into account the benchmark from the last game and
-  the previous benchmark, which is updated and saved in a dedicated MAME benchmarks directory (${MAMEconfigdir}/benchmarks).
-- Average emulation speed is converted into a 1-5 star rating.
-- The benchmark data are reformatted and saved in a formatted ASCII file: AMbenchmarks.ini
-- This allows benchmark data to be displayed in Attract-Mode layouts by using the 'file-format' module.
+MAME support program to analyze MAME emulation benchmark files of a single game or a list of games:
+- Average emulation speed and total emulation time are calculated by taking into account the benchmark from the last game and the previous benchmark.
+- The previous benchmark is updated and saved in a dedicated MAME benchmarks directory.
+- The average emulation speed is converted into a 1-5 star rating.
+- Benchmark data are saved in a formatted ASCII file (AMbenchmarks.ini). This file can be used to display benchmark data in Attract-Mode.
 
 Usage:
 
@@ -23,7 +22,7 @@ OR to process all games in your MAME benchmarks directory, type:
    ./benchmarkanalysis.py all
 
 Author: Gordon Lim
-Last Edit: 29 Jan 2018 
+Last Edit: 1 Feb 2018 
 """
 
 import configsetup
@@ -116,7 +115,7 @@ def createbenchmarkfile(game):
 
     # Save benchmark data in AMbenchmarks.ini:
 
-    AMbenchmarkfilename = configsetup.AMsupportdir + "AMbenchmarks.ini"
+    AMbenchmarkfilename = configsetup.AMsupportdir + "data/AMbenchmarks.ini"
 
     AMbenchmarkfilename_exists = False    
     if os.path.isfile(AMbenchmarkfilename):
@@ -166,6 +165,10 @@ def main():
             return 1
 
     # Check input and process game(s):
+
+    if (len(sys.argv) != 2):
+        print("Please provide a romname or 'all' as input argument")
+        return 1
     
     inputargument = sys.argv[1]
 
