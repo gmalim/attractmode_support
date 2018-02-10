@@ -1,0 +1,4 @@
+# List of directories containing bezel artwork (order matters: if game is present in more than one directory, bezel in last directory in list will be used):
+${HOME}/Games/Arcade Art/bezel/artwork_mrDo/
+${HOME}/Games/Arcade Art/bezel/artwork_Comboman/
+${HOME}/Games/Arcade Art/bezel/artwork_Nightvoice/
