@@ -163,7 +163,7 @@ def main():
     for game in games:
 
         romname = game[0]
-        
+
         print("--- Analyzing bezels for {}...".format(romname))
         
         # Skip excluded games:
@@ -203,7 +203,7 @@ def main():
 
         # 1) Search for bezel tag in "Artwork type:" line:
         
-        matchobject = re.search('Artwork type:[\w\s,;]*[Bb]ezel', laytextstring)
+        matchobject = re.search('Artwork type:.*[Bb]ezel', laytextstring)
 
         if matchobject:
             print("------ regex search found a bezel tag in .lay file...")
@@ -215,15 +215,15 @@ def main():
 
         # 2) Search for view name and bezel element name:
 
-        bezelelement_patterns1 = ['[Bb]ez[\w-]+','[Oo]uter[\w-]*','[Ii]nner[\w-]*', 'sac[\w-]*', \
-                                  '[\w-]+[Bb]ez[\w-]+','[\w-]+[Oo]uter[\w-]*','[\w-]+[Ii]nner[\w-]*']
+        bezelelement_patterns1 = ['[Bb]ez.+','[Oo]uter.*','[Ii]nner.*', 'sac.*', \
+                                  '.+[Bb]ez.+','.+[Oo]uter.*','.+[Ii]nner.*']
         
-        bezelelement_patterns2 = ['[Cc]oc[\w-]+', '[\w-]+[Cc]oc[\w-]+', '[Bb]ez[\w-]+', '[\w-]+[Bb]ez[\w-]+']
+        bezelelement_patterns2 = ['[Cc]oc.+', '.+[Cc]oc.+', '[Bb]ez.+', '.+[Bb]ez.+']
 
         bezelelementfound = False
         
         for bezelelement_pattern in bezelelement_patterns1:
-            regexquery = '<view name=\"([\w-]*[Uu]p[\w-]+)\">\s*\n(?:.+\n)*?\s+<bezel element=\"(' + bezelelement_pattern + ')\"'
+            regexquery = '<view name=\"(.*[Uu]p.+)\">\s*\n(?:.+\n)*?\s+<bezel element=\"(' + bezelelement_pattern + ')\"'
             matchobject = re.search(regexquery, laytextstring)
             if matchobject:
                 print("------ .lay file contains view name '{}' and bezel element '{}' ...".format(matchobject.group(1), matchobject.group(2)))
@@ -237,8 +237,17 @@ def main():
             continue
 
         if not bezelelementfound:
+            for bezelelement_pattern in bezelelement_patterns1:                
+                regexquery = '<view name=\"(Marquee.*)\">\s*\n(?:.+\n)*?\s+<bezel element=\"(' + bezelelement_pattern + ')\"'
+                matchobject = re.search(regexquery, laytextstring)
+                if matchobject:
+                    print("------ .lay file contains view name '{}' and bezel element '{}' ...".format(matchobject.group(1), matchobject.group(2)))
+                    bezelelementfound = True
+                    break
+                
+        if not bezelelementfound:
             for bezelelement_pattern in bezelelement_patterns2:                
-                regexquery = '<view name=\"([\w-]*[Co]oc[\w-]+)\">\s*\n(?:.+\n)*?\s+<bezel element=\"(' + bezelelement_pattern + ')\"'
+                regexquery = '<view name=\"(.*[Cc]oc.+)\">\s*\n(?:.+\n)*?\s+<bezel element=\"(' + bezelelement_pattern + ')\"'
                 matchobject = re.search(regexquery, laytextstring)
                 if matchobject:
                     print("------ .lay file contains view name '{}' and bezel element '{}' ...".format(matchobject.group(1), matchobject.group(2)))
@@ -256,7 +265,7 @@ def main():
         
         # 3) Search for .png filename:
 
-        regexquery = '<element name=\"' + bezelelement + '\"\s*>\s*\n\s+<image file=\"([\w-]+.png)\"'
+        regexquery = '<element name=\"' + bezelelement + '\"\s*>\s*\n\s+<image file=\"([\w-]+\.png)\"'
         
         matchobject = re.search(regexquery, laytextstring)
 
@@ -311,7 +320,7 @@ def main():
 
         # 5) Search for bezel dimensions:
             
-        regexquery = '<view name=\"' + viewname + '\">\s*\n(?:.+\n)*?\s+<bezel element=\"' + bezelelement + '\">\s*\n\s+<bounds x=\"([-.\d]+)\" y=\"([-.\d]+)\" width=\"([.\d]+)\" height=\"([.\d]+)\"'
+        regexquery = '<view name=\"' + viewname + '\">\s*\n(?:.+\n)*?\s+<bezel element=\"' + bezelelement + '\"\s*>\s*\n\s+<bounds x=\"([-.\d]+)\" y=\"([-.\d]+)\" width=\"([.\d]+)\" height=\"([.\d]+)\"'
         
         matchobject = re.search(regexquery, laytextstring)
 
