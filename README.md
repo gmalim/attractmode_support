@@ -65,13 +65,14 @@ Python program to analyze MAME bezel artwork:
 
 Requirements:
 
-- Bezel artwork, e.g. [http://www.progettosnaps.net/artworks/](http://www.progettosnaps.net/artworks/)
+- Bezel artwork, e.g. [http://mrdo.mameworld.info/mame_artwork_ingame.php](http://mrdo.mameworld.info/mame_artwork_ingame.php), [http://www.progettosnaps.net/artworks/](http://www.progettosnaps.net/artworks/)
+- Multiple artwork directories are supported. Put each directory on a separate line in [data/bezeldirectories.txt](data/bezeldirectories.txt). The directory order matters: If a game is present in more than one directory, the bezel in the last directory in the list is used.
 - Each bezel artwork .zip file should be unzipped in its own corresponding directory (use [unziplist.bash](unziplist.bash)).
 - Sips (to create low resolution versions of bezels): An command-line image processing tool that is standard installed on Mac OS X. If Sips is not installed, symbolic links to the original bezel files will be created instead. For Linux and Windows users, a great free alternative to Sips is [ImageMagick](https://www.imagemagick.org) - just install and change the code accordingly.
 
 Options:
 
-- [bezelexceptions.txt](data/bezelexceptions.txt): An example file is provided. Unfortunately for some bezels the analysis can give wrong results in Attract-Mode (e.g because the .lay file contains additional xml tags or has a non-standard structure). Games for which the analysis fails should be added to bezelexceptions.txt, the corresponding bezel file in the AM bezels directory should be deleted and bezelanalysis.py should be run again to generate a new AMbezels.ini.
+- [data/bezelexceptions.txt](data/bezelexceptions.txt): An example file is provided. Unfortunately for some bezels the analysis can give wrong results in Attract-Mode (e.g because the .lay file contains non-standard tags or has a non-standard structure). Games for which the analysis fails should be added to bezelexceptions.txt, the corresponding bezel file in the AM bezels directory should be deleted and bezelanalysis.py should be run again to generate a new AMbezels.ini.
 
 Usage: See program docstring
 
@@ -83,7 +84,7 @@ Python program to reformat and save game controls data in a formatted ASCII file
 
 Requirements:
 
-- Latest [controls.ini](data/controls.ini) file: no longer developed (?), latest version is provided (v0.141.1 taken from [here](http://ledblinky.net/downloads/controls.ini.0.141.1.zip)).
+- Latest [controls.ini](data/controls.ini) file: no longer under development (?), latest version is provided (v0.141.1 taken from [here](http://ledblinky.net/downloads/controls.ini.0.141.1.zip)).
 
 Usage: See program docstring
 
