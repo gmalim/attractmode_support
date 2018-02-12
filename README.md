@@ -9,7 +9,7 @@ This repository contains a collection of programs that provides [MAME](http://ww
 - [MAME game controls support for Attract-Mode](#control)
 - [MAME title display and sorting support for Attract-Mode](#title)
 - [MAME startup scripts](#start)
-- [Attract-Mode layout with abovementioned MAME support (WIP)](#layout)
+- [Customized Attract-Mode layout with abovementioned MAME support (WIP)](#layout)
 
 ---
 <a name="benchgen" />
@@ -58,6 +58,7 @@ Usage: See program docstring
 
 Python program to analyze MAME bezel artwork:
 
+- Multiple bezel artwork directories are supported. Put each directory on a separate line in [data/bezeldirectories.txt](data/bezeldirectories.txt). The directory order matters: If a game is present in more than one directory, the bezel in the last directory in the list is used.
 - Analysis is based on the standard .lay file structure as defined [here](http://wiki.mamedev.org/index.php/LAY_File_Basics_-_Part_I).
 - User chooses whether to create a low resolution version of each bezel (since bezel files usually are high resolution and therefore can be slow to render in Attract-Mode), or create symbolic links to the original bezel files.
 - Low-resolution bezels / symlinks are saved in a dedicated Attract-Mode bezels directory.
@@ -65,14 +66,13 @@ Python program to analyze MAME bezel artwork:
 
 Requirements:
 
-- Bezel artwork, e.g. [http://mrdo.mameworld.info/mame_artwork_ingame.php](http://mrdo.mameworld.info/mame_artwork_ingame.php), [http://www.progettosnaps.net/artworks/](http://www.progettosnaps.net/artworks/)
-- Multiple artwork directories are supported. Put each directory on a separate line in [data/bezeldirectories.txt](data/bezeldirectories.txt). The directory order matters: If a game is present in more than one directory, the bezel in the last directory in the list is used.
-- Each bezel artwork .zip file should be unzipped in its own corresponding directory (use [unziplist.bash](unziplist.bash)).
+- Bezel artwork, e.g. [http://mrdo.mameworld.info](http://mrdo.mameworld.info), [http://www.progettosnaps.net/artworks/](http://www.progettosnaps.net/artworks/)
+- Each bezel artwork .zip file should be unzipped in its own corresponding directory. Use [unziplist.bash](unziplist.bash) to unzip every .zip in a bezel artwork directory.
 - Sips (to create low resolution versions of bezels): An command-line image processing tool that is standard installed on Mac OS X. If Sips is not installed, symbolic links to the original bezel files will be created instead. For Linux and Windows users, a great free alternative to Sips is [ImageMagick](https://www.imagemagick.org) - just install and change the code accordingly.
 
 Options:
 
-- [data/bezelexceptions.txt](data/bezelexceptions.txt): An example file is provided. Unfortunately for some bezels the analysis can give wrong results in Attract-Mode (e.g because the .lay file contains non-standard tags or has a non-standard structure). Games for which the analysis fails should be added to bezelexceptions.txt, the corresponding bezel file in the AM bezels directory should be deleted and bezelanalysis.py should be run again to generate a new AMbezels.ini.
+- Unfortunately for some bezels the analysis can give wrong results in Attract-Mode, e.g because the .lay file contains non-standard tags or has a non-standard structure. Games for which the analysis fails should be added to [data/bezelexceptions.txt](data/bezelexceptions.txt), the corresponding bezel file in the AM bezels directory should be deleted and bezelanalysis.py should be run again to generate a new AMbezels.ini.
 
 Usage: See program docstring
 
@@ -116,7 +116,7 @@ Startup scripts for the sh and csh shell families to automate the execution of [
 
 <a name="layout" />
 
-### Attract-Mode layout with abovementioned MAME support (WIP): [*mylayout*](mylayout)
+### Customized Attract-Mode layout with abovementioned MAME support (WIP): [*mylayout*](mylayout)
 
 Attract-Mode layout for arcade games emulated with MAME, featuring:
 
